@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Primary Meta Tags -->
+        <title>{{ name }} - {{ title }}</title>
+        <meta name="title" content="{{ name }} - {{ title }}">
+        <meta name="description" content="{{ description }}">
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ site_url }}">
+        <meta property="og:title" content="{{ name }} - {{ title }}">
+        <meta property="og:description" content="{{ description }}">
+        <meta property="og:image" content="{{ avatar }}">
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ site_url }}">
+        <meta property="twitter:title" content="{{ name }} - {{ title }}">
+        <meta property="twitter:description" content="{{ description }}">
+        <meta property="twitter:image" content="{{ avatar }}">
+        <meta property="twitter:creator" content="{{ twitter_handle }}">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ avatar }}">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+        <style>
+    :root {
+      --bg-color: #fafafa;
+      --text-color: #1a1a1a;
+      --link-bg: #f0f0f0;
+      --link-hover: #e0e0e0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1a1a1a;
+        --text-color: #fafafa;
+        --link-bg: #2a2a2a;
+        --link-hover: #3a3a3a;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .title {
+      font-size: 18px;
+      color: #666;
+      margin: 0;
+    }
+
+    .description {
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--link-bg);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+    }
+
+    .social-link i {
+      font-size: 24px;
+    }
+
+    .social-link:hover {
+      background: var(--link-hover);
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="profile">
+                <div class="avatar">
+                    <img src="{{ avatar }}" alt="{{ name }}">
+                </div>
+                <h1 class="name">{{ name }}</h1>
+                <p class="title">{{ title }}</p>
+                <p class="description">{{ description }}</p>
+                <div class="links">
+                    {% for link in social %}
+                        <a href="{{ link.url }}"
+                           class="social-link"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands {{ social_icons[link.platform] }}"></i>
+                            <span>{{ link.label }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="footer">Updated {{ updated_date }}</div>
+            </div>
+        </div>
+    </body>
+</html>

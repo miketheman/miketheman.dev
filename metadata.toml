@@ -1,0 +1,26 @@
+# Profile Configuration
+name = "Mike Fiedler"
+title = "Code Gardener"
+avatar = "https://github.com/miketheman.png"
+
+# Note: The order of the sections determines the output order.
+
+[[social]]
+platform = "github"
+url = "https://github.com/miketheman"
+label = "GitHub"
+
+[[social]]
+platform = "bluesky"
+url = "https://bsky.app/profile/miketheman.com"
+label = "Bluesky"
+
+[[social]]
+platform = "mastodon"
+url = "https://hachyderm.io/@miketheman"
+label = "Mastodon"
+
+[[social]]
+platform = "linkedin"
+url = "https://www.linkedin.com/in/miketheman/"
+label = "LinkedIn"

@@ -16,4 +16,4 @@ The resulting `index.html` file will be created in the root directory.
 
 ## Deploy
 
-TODO: complete this section
+Handled via GitHub Actions. See the `.github/workflows/deploy.yml` file for details.

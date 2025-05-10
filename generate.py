@@ -40,7 +40,7 @@ def generate_html(metadata):
     html = template.render(**context)
 
     # Write the generated HTML to a file
-    with open("index.html", "w") as f:
+    with open("dist/index.html", "w") as f:
         f.write(html)
 
 

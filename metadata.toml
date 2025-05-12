@@ -5,22 +5,32 @@ avatar = "https://miketheman.dev/avatar.png"
 
 # Note: The order of the sections determines the output order.
 
-[[social]]
-platform = "github"
+[[links]]
 url = "https://github.com/miketheman"
 label = "GitHub"
+icon = "fa-brands fa-github"
 
-[[social]]
-platform = "bluesky"
+[[links]]
 url = "https://bsky.app/profile/miketheman.com"
 label = "Bluesky"
+icon = "fa-brands fa-bluesky"
 
-[[social]]
-platform = "mastodon"
+[[links]]
 url = "https://hachyderm.io/@miketheman"
+icon = "fa-brands fa-mastodon"
 label = "Mastodon"
 
-[[social]]
-platform = "linkedin"
+[[links]]
 url = "https://www.linkedin.com/in/miketheman/"
 label = "LinkedIn"
+icon = "fa-brands fa-linkedin"
+
+[[links]]
+url = "https://www.miketheman.net/"
+label = "Personal Blog"
+icon = "fa-solid fa-blog"
+
+[[links]]
+url = "https://blog.pypi.org/"
+label = "PyPI Blog"
+icon = "fa-brands fa-python"

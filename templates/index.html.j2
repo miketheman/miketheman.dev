@@ -115,7 +115,7 @@
       margin-top: 20px;
     }
 
-    .social-link {
+    .external-link {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -127,11 +127,11 @@
       transition: background-color 0.2s;
     }
 
-    .social-link i {
+    .external-link i {
       font-size: 24px;
     }
 
-    .social-link:hover {
+    .external-link:hover {
       background: var(--link-hover);
     }
 
@@ -153,12 +153,12 @@
                 <p class="title">{{ title }}</p>
                 <p class="description">{{ description }}</p>
                 <div class="links">
-                    {% for link in social %}
+                    {% for link in links %}
                         <a href="{{ link.url }}"
-                           class="social-link"
+                           class="external-link"
                            rel="noopener noreferrer"
                            target="_blank">
-                            <i class="fa-brands {{ social_icons[link.platform] }}"></i>
+                            <i class="{{ link.icon }}"></i>
                             <span>{{ link.label }}</span>
                         </a>
                     {% endfor %}

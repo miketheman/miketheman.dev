@@ -28,13 +28,6 @@ def generate_html(metadata):
     context = {
         **metadata,
         "updated_date": datetime.datetime.now().strftime("%B %d, %Y"),
-        # Map of social platforms to their FontAwesome class names
-        "social_icons": {
-            "github": "fa-github",
-            "linkedin": "fa-linkedin",
-            "bluesky": "fa-bluesky",
-            "mastodon": "fa-mastodon",
-        },
     }
 
     # Render template with context

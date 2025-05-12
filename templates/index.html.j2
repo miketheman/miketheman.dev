@@ -70,9 +70,9 @@
     }
 
     .avatar {
-      width: 128px;
-      height: 128px;
-      border-radius: 50%;
+      width: 100%;
+      max-width: 512px;
+      height: auto;
       overflow: hidden;
     }
 
@@ -80,6 +80,13 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .avatar {
+        max-width: 300px;
+      }
     }
 
     .name {

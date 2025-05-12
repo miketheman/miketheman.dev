@@ -6,6 +6,7 @@
 # ]
 # ///
 import datetime
+import shutil
 import tomllib
 
 from jinja2 import Environment, FileSystemLoader
@@ -47,6 +48,8 @@ def generate_html(metadata):
 def main():
     metadata = read_metadata()
     generate_html(metadata)
+    # copy avatar.png to dist
+    shutil.copy("avatar.png", "dist/avatar.png")
 
 
 if __name__ == "__main__":

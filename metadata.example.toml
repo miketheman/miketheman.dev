@@ -1,0 +1,50 @@
+# Example configuration file for your personal website
+# Copy this to metadata.toml and customize with your information
+
+# Profile Configuration
+name = "Your Name"
+title = "Your Professional Title"
+description = "A brief description about yourself and what you do."
+avatar = "https://yoursite.com/avatar.png"
+site_url = "https://yoursite.com"
+twitter_handle = "@yourusername"
+
+# Social Links
+# Note: The order of the sections determines the display order
+
+[[links]]
+url = "https://github.com/yourusername"
+label = "GitHub"
+icon = "fa-brands fa-github"
+
+[[links]]
+url = "https://bsky.app/profile/yourusername.com"
+label = "Bluesky"
+icon = "fa-brands fa-bluesky"
+
+[[links]]
+url = "https://mastodon.social/@yourusername"
+icon = "fa-brands fa-mastodon"
+label = "Mastodon"
+
+[[links]]
+url = "https://www.linkedin.com/in/yourusername/"
+label = "LinkedIn"
+icon = "fa-brands fa-linkedin"
+
+[[links]]
+url = "https://yourblog.com/"
+label = "Personal Blog"
+icon = "fa-solid fa-blog"
+
+[[links]]
+url = "https://twitter.com/yourusername"
+label = "Twitter"
+icon = "fa-brands fa-twitter"
+
+# Available Font Awesome icons:
+# - fa-brands fa-github, fa-brands fa-twitter, fa-brands fa-linkedin
+# - fa-brands fa-mastodon, fa-brands fa-bluesky, fa-brands fa-instagram
+# - fa-brands fa-youtube, fa-brands fa-twitch, fa-brands fa-discord
+# - fa-solid fa-blog, fa-solid fa-envelope, fa-solid fa-globe
+# - And many more at https://fontawesome.com/icons

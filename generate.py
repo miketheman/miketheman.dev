@@ -39,10 +39,26 @@ def generate_html(metadata):
 
 
 def main():
-    metadata = read_metadata()
-    generate_html(metadata)
-    # copy avatar.png to dist
-    shutil.copy("avatar.png", "dist/avatar.png")
+    try:
+        # Ensure dist directory exists
+        import os
+        os.makedirs("dist", exist_ok=True)
+
+        metadata = read_metadata()
+        generate_html(metadata)
+
+        # Copy avatar.png to dist if it exists
+        if os.path.exists("avatar.png"):
+            shutil.copy("avatar.png", "dist/avatar.png")
+            print("✅ Website generated successfully in dist/")
+        else:
+            print("⚠️  Website generated, but avatar.png not found. Run ./avatar.py to generate it.")
+
+    except FileNotFoundError as e:
+        print(f"❌ Error: {e}")
+        print("Make sure metadata.toml exists and is properly formatted.")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
 
 
 if __name__ == "__main__":

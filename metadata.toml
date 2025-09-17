@@ -1,7 +1,9 @@
 # Profile Configuration
 name = "Mike Fiedler"
 title = "Code Gardener"
+description = "Building better software, one commit at a time. Open source contributor and Python enthusiast."
 avatar = "https://miketheman.dev/avatar.png"
+site_url = "https://miketheman.dev"
 
 # Note: The order of the sections determines the output order.
 

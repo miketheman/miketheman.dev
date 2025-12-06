@@ -33,6 +33,7 @@
       --text-color: #1a1a1a;
       --link-bg: #f0f0f0;
       --link-hover: #e0e0e0;
+      --secondary-text-color: #666;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -41,6 +42,7 @@
         --text-color: #fafafa;
         --link-bg: #2a2a2a;
         --link-hover: #3a3a3a;
+        --secondary-text-color: #999;
       }
     }
 
@@ -97,7 +99,7 @@
 
     .title {
       font-size: 18px;
-      color: #666;
+      color: var(--secondary-text-color);
       margin: 0;
     }
 
@@ -184,14 +186,14 @@
 
     .extra-link-date {
       font-size: 12px;
-      color: #666;
+      color: var(--secondary-text-color);
     }
 
     .footer {
       margin-top: 40px;
       text-align: center;
       font-size: 14px;
-      color: #666;
+      color: var(--secondary-text-color);
     }
         </style>
     </head>

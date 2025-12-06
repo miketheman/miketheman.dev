@@ -57,10 +57,10 @@ icon = "fa-brands fa-twitter"
 label = "PyCon 2024 - Building Better Python Packages"
 url = "https://example.com/slides"
 icon = "fa-solid fa-presentation"
-date = "2024-05-15"  # Optional: Display date for events/presentations
+date = "2024-05-15"  # Optional: Date string in any format (e.g., "2024-05-15" or "May 15, 2024")
 
 [[extras]]
 label = "Conference Talk Recording"
 url = "https://youtube.com/watch?v=example"
 icon = "fa-brands fa-youtube"
-date = "2024-06-20"
+date = "2024-06-20"  # Optional: Can be omitted if date is not applicable

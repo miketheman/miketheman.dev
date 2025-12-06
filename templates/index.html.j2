@@ -117,7 +117,7 @@
       margin-top: 20px;
     }
 
-    .external-link {
+    .link-item {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -129,12 +129,16 @@
       transition: background-color 0.2s;
     }
 
-    .external-link i {
+    .link-item i {
       font-size: 24px;
     }
 
-    .external-link:hover {
+    .link-item:hover {
       background: var(--link-hover);
+    }
+
+    .external-link {
+      /* Uses .link-item styles */
     }
 
     .extras-section {
@@ -158,23 +162,7 @@
     }
 
     .extra-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      background: var(--link-bg);
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--text-color);
-      transition: background-color 0.2s;
-    }
-
-    .extra-link i {
-      font-size: 24px;
-    }
-
-    .extra-link:hover {
-      background: var(--link-hover);
+      /* Uses .link-item styles */
     }
 
     .extra-link-content {
@@ -209,7 +197,7 @@
                 <div class="links">
                     {% for link in links %}
                         <a href="{{ link.url }}"
-                           class="external-link"
+                           class="link-item external-link"
                            rel="noopener noreferrer"
                            target="_blank">
                             <i class="{{ link.icon }}"></i>
@@ -223,7 +211,7 @@
                     <div class="extras-links">
                         {% for extra in extras %}
                             <a href="{{ extra.url }}"
-                               class="extra-link"
+                               class="link-item extra-link"
                                rel="noopener noreferrer"
                                target="_blank">
                                 <i class="{{ extra.icon }}"></i>

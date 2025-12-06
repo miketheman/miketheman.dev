@@ -158,10 +158,7 @@ When adding new Python dependencies:
    # ///
    ```
 
-2. For the `generate.py` script, also update `generate.py.lock` if needed:
-   ```bash
-   uv run --script generate.py
-   ```
+2. The `generate.py.lock` file is automatically managed by `uv` and doesn't need manual updates. It's used by GitHub Actions for reproducible builds.
 
 ### Current Dependencies
 
@@ -225,15 +222,17 @@ icon = "fa-brands fa-service"  # Font Awesome icon class
 
 ### Regenerating Avatar
 
-1. Update `AVATAR_FILE_PATH` in `avatar.py` to point to your photo
+1. Edit the hardcoded `AVATAR_FILE_PATH` variable in `avatar.py` (currently points to a specific Dropbox location) to point to your own profile photo file path
 2. Run: `./avatar.py`
 3. Rebuild site: `./generate.py`
+
+Note: The avatar.py script requires a personal photo file at the path you specify.
 
 ## Important Notes
 
 - **Generated Files**: The `dist/` directory contains generated files and should not be edited directly
-- **Avatar File**: The `avatar.py` script requires a personal photo file. Update the path before running
+- **Avatar File**: The `avatar.py` script has a hardcoded path to a personal photo file that needs to be updated before use. Edit the `AVATAR_FILE_PATH` variable to point to your own profile photo.
 - **Python Version**: Always ensure scripts are compatible with Python 3.13+
 - **uv Requirement**: All scripts are designed to run with `uv` for consistent dependency management
 - **Executable Scripts**: All `.py` scripts in the root are executable with proper shebangs
-- **Lock Files**: `generate.py.lock` tracks dependencies for the deployment workflow
+- **Lock Files**: `generate.py.lock` is automatically managed by `uv` and tracks dependencies for the deployment workflow

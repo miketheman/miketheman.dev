@@ -202,6 +202,7 @@
                     <div class="extras-heading">Extras</div>
                     <div class="extras-links">
                         {% for extra in extras %}
+                            <!-- Extra links use a wrapper div to support optional date display below label -->
                             <a href="{{ extra.url }}"
                                class="link-item"
                                rel="noopener noreferrer"

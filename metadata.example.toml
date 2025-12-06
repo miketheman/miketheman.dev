@@ -48,3 +48,19 @@ icon = "fa-brands fa-twitter"
 # - fa-brands fa-youtube, fa-brands fa-twitch, fa-brands fa-discord
 # - fa-solid fa-blog, fa-solid fa-envelope, fa-solid fa-globe
 # - And many more at https://fontawesome.com/icons
+
+# Extras Section (Optional)
+# Additional content like presentations, talks, resources, etc.
+# This section will appear below the main links with a heading.
+
+[[extras]]
+label = "PyCon 2024 - Building Better Python Packages"
+url = "https://example.com/slides"
+icon = "fa-solid fa-presentation"
+date = "2024-05-15"  # Optional: Display date for events/presentations
+
+[[extras]]
+label = "Conference Talk Recording"
+url = "https://youtube.com/watch?v=example"
+icon = "fa-brands fa-youtube"
+date = "2024-06-20"

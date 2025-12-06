@@ -135,6 +135,58 @@
       background: var(--link-hover);
     }
 
+    .extras-section {
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    .extras-heading {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    .extras-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .extra-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--link-bg);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+    }
+
+    .extra-link i {
+      font-size: 24px;
+    }
+
+    .extra-link:hover {
+      background: var(--link-hover);
+    }
+
+    .extra-link-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .extra-link-date {
+      font-size: 12px;
+      color: #666;
+    }
+
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -163,6 +215,27 @@
                         </a>
                     {% endfor %}
                 </div>
+                {% if extras %}
+                <div class="extras-section">
+                    <div class="extras-heading">Extras</div>
+                    <div class="extras-links">
+                        {% for extra in extras %}
+                            <a href="{{ extra.url }}"
+                               class="extra-link"
+                               rel="noopener noreferrer"
+                               target="_blank">
+                                <i class="{{ extra.icon }}"></i>
+                                <div class="extra-link-content">
+                                    <span>{{ extra.label }}</span>
+                                    {% if extra.date %}
+                                    <span class="extra-link-date">{{ extra.date }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
                 <div class="footer">Updated {{ updated_date }}</div>
             </div>
         </div>

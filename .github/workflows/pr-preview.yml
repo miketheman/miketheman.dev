@@ -34,3 +34,4 @@ jobs:
           source-dir: dist
           preview-branch: gh-pages
           umbrella-dir: pr-preview
+          pages-base-url: miketheman.dev

@@ -1,0 +1,46 @@
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Run at 6:00 AM UTC every Monday
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze Python Code
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9278e803588a841abb8cb61b8d0c0a2e18bbe188 # v3.28.10
+        with:
+          languages: python
+          # Enable caching to speed up subsequent runs
+          # This caches the CodeQL database and analysis results
+          queries: security-and-quality
+          # Enable database caching for faster analysis
+          # This significantly reduces analysis time on subsequent runs
+          cache: true
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@9278e803588a841abb8cb61b8d0c0a2e18bbe188 # v3.28.10
+        with:
+          category: "/language:python"
+          # Upload results even if there are no vulnerabilities found
+          upload: true

@@ -2,10 +2,10 @@ name: PR Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-  pull_request_target:
-    types: [closed]
+    types: [opened, synchronize, reopened, closed]
 
+# Use pull_request instead of pull_request_target for security
+# This ensures untrusted code from forks runs with limited permissions
 permissions:
   contents: write
   pull-requests: write
@@ -18,7 +18,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
       - name: Install the latest version of uv

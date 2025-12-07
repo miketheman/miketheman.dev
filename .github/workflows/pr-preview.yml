@@ -56,15 +56,14 @@ jobs:
             
             // Check if preview URL already exists in description
             const previewMarker = '<!-- PR_PREVIEW_URL -->';
-            const previewSection = `\n\n${previewMarker}\n## 🔍 Preview\n\nView the preview of this PR at: ${previewUrl}\n\n_Note: The preview will be ready once the GitHub Pages deployment completes._`;
+            const previewEndMarker = '<!-- PR_PREVIEW_URL_END -->';
+            const previewSection = `\n\n${previewMarker}\n## 🔍 Preview\n\nView the preview of this PR at: ${previewUrl}\n\n_Note: The preview will be ready once the GitHub Pages deployment completes._\n${previewEndMarker}`;
             
             let newBody;
             if (currentBody.includes(previewMarker)) {
-              // Replace existing preview section
-              newBody = currentBody.replace(
-                new RegExp(`${previewMarker}[\\s\\S]*`),
-                previewSection
-              );
+              // Replace existing preview section (between markers)
+              const regex = new RegExp(`${previewMarker}[\\s\\S]*?${previewEndMarker}`, 'g');
+              newBody = currentBody.replace(regex, previewSection);
             } else {
               // Append new preview section
               newBody = currentBody + previewSection;

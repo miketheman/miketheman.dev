@@ -24,6 +24,10 @@ def generate_html(metadata):
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("index.html.j2")
 
+    # Initialize extras variables
+    visible_extras = []
+    expandable_extras = []
+
     # Sort extras by date (most recent first) if they exist
     if "extras" in metadata and metadata["extras"]:
         # Validate extras have required date field
@@ -50,8 +54,10 @@ def generate_html(metadata):
         # Split extras into visible and expandable groups
         visible_extras = metadata["extras"][:5]
         expandable_extras = metadata["extras"][5:] if len(metadata["extras"]) > 5 else []
-        metadata["visible_extras"] = visible_extras
-        metadata["expandable_extras"] = expandable_extras
+    
+    # Add extras to metadata
+    metadata["visible_extras"] = visible_extras
+    metadata["expandable_extras"] = expandable_extras
 
     # Add additional context for the template
     context = {

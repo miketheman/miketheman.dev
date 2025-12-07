@@ -1,5 +1,8 @@
 name: "CodeQL Analysis"
 
+# CodeQL automatically caches databases between runs to speed up analysis.
+# No explicit caching configuration is needed - GitHub Actions manages this automatically.
+
 on:
   push:
     branches:
@@ -31,16 +34,9 @@ jobs:
         uses: github/codeql-action/init@9278e803588a841abb8cb61b8d0c0a2e18bbe188 # v3.28.10
         with:
           languages: python
-          # Enable caching to speed up subsequent runs
-          # This caches the CodeQL database and analysis results
           queries: security-and-quality
-          # Enable database caching for faster analysis
-          # This significantly reduces analysis time on subsequent runs
-          cache: true
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@9278e803588a841abb8cb61b8d0c0a2e18bbe188 # v3.28.10
         with:
           category: "/language:python"
-          # Upload results even if there are no vulnerabilities found
-          upload: true

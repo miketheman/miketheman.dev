@@ -92,6 +92,10 @@ Each extra item supports:
 
 Deployment is handled automatically via GitHub Actions when you push to the main branch. The workflow builds the site and deploys it to GitHub Pages.
 
+### Pull Request Previews
+
+When you create a pull request, a preview of your changes is automatically deployed to a unique URL and linked in the PR description. This allows you to review changes before merging. The preview is automatically cleaned up when the PR is closed.
+
 ## 🎨 Customization
 
 - **Styling**: Modify the CSS in `templates/index.html.j2`

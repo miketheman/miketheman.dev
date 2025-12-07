@@ -27,7 +27,7 @@ jobs:
         run: uv run generate.py
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@132898c54c57bf7b8c7e47f9dc77f3c350f477ee # v4.7.4
+        uses: JamesIves/github-pages-deploy-action@4a3abc783e1a24aeb44c16e869ad83caf6b4cc23 # v4.7.4
         with:
           folder: dist
           branch: gh-pages

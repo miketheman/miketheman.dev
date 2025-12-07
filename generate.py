@@ -26,6 +26,22 @@ def generate_html(metadata):
 
     # Sort extras by date (most recent first) if they exist
     if "extras" in metadata and metadata["extras"]:
+        # Validate extras have required date field
+        for i, extra in enumerate(metadata["extras"]):
+            if "date" not in extra:
+                raise ValueError(
+                    f"Extras item {i+1} ('{extra.get('label', 'unknown')}') is missing required 'date' field"
+                )
+            # Validate date format
+            try:
+                datetime.datetime.strptime(extra["date"], "%Y-%m-%d")
+            except ValueError:
+                raise ValueError(
+                    f"Extras item {i+1} ('{extra.get('label', 'unknown')}') has invalid date format. "
+                    f"Expected ISO 8601 format (YYYY-MM-DD), got: {extra['date']}"
+                )
+        
+        # Sort by date
         metadata["extras"] = sorted(
             metadata["extras"],
             key=lambda x: datetime.datetime.strptime(x["date"], "%Y-%m-%d"),

@@ -190,8 +190,17 @@
       background: var(--link-hover);
     }
 
+    /* Hide details marker across all browsers */
+    .extras-summary {
+      list-style: none;
+    }
+
     .extras-summary::-webkit-details-marker {
       display: none;
+    }
+
+    .extras-summary::-moz-list-bullet {
+      list-style-type: none;
     }
 
     .extras-expandable {

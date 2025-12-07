@@ -36,15 +36,3 @@ icon = "fa-solid fa-blog"
 url = "https://blog.pypi.org/"
 label = "PyPI Blog"
 icon = "fa-brands fa-python"
-
-# Extras Section - Additional presentations, talks, resources
-[[extras]]
-label = "PyCon US 2024 - Security in Python Packaging"
-url = "https://www.youtube.com/watch?v=example"
-icon = "fa-solid fa-presentation"
-date = "May 15, 2024"
-
-[[extras]]
-label = "Talk Slides & Resources"
-url = "https://github.com/miketheman/talks"
-icon = "fa-solid fa-file-pdf"

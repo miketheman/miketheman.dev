@@ -169,6 +169,38 @@
       color: var(--secondary-text-color);
     }
 
+    .extras-details {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .extras-summary {
+      padding: 12px;
+      background: var(--link-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      list-style: none;
+      text-align: center;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+
+    .extras-summary:hover {
+      background: var(--link-hover);
+    }
+
+    .extras-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .extras-expandable {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
     .footer {
       margin-top: 40px;
       text-align: center;
@@ -197,12 +229,12 @@
                         </a>
                     {% endfor %}
                 </div>
-                {% if extras %}
+                {% if visible_extras %}
                 <div class="extras-section">
                     <div class="extras-heading">Extras</div>
                     <div class="extras-links">
-                        {% for extra in extras %}
-                            <!-- Extra links use a wrapper div to support optional date display below label -->
+                        {% for extra in visible_extras %}
+                            <!-- Extra links use a wrapper div to support date display below label -->
                             <a href="{{ extra.url }}"
                                class="link-item"
                                rel="noopener noreferrer"
@@ -210,12 +242,29 @@
                                 <i class="{{ extra.icon }}"></i>
                                 <div class="extra-link-content">
                                     <span>{{ extra.label }}</span>
-                                    {% if extra.date %}
                                     <span class="extra-link-date">{{ extra.date }}</span>
-                                    {% endif %}
                                 </div>
                             </a>
                         {% endfor %}
+                        {% if expandable_extras %}
+                        <details class="extras-details">
+                            <summary class="extras-summary">Show more ({{ expandable_extras|length }})</summary>
+                            <div class="extras-expandable">
+                                {% for extra in expandable_extras %}
+                                    <a href="{{ extra.url }}"
+                                       class="link-item"
+                                       rel="noopener noreferrer"
+                                       target="_blank">
+                                        <i class="{{ extra.icon }}"></i>
+                                        <div class="extra-link-content">
+                                            <span>{{ extra.label }}</span>
+                                            <span class="extra-link-date">{{ extra.date }}</span>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </details>
+                        {% endif %}
                     </div>
                 </div>
                 {% endif %}

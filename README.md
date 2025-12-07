@@ -54,7 +54,7 @@ icon = "fa-brands fa-github"
 label = "PyCon 2024 - My Talk"
 url = "https://example.com/slides"
 icon = "fa-solid fa-presentation"
-date = "May 15, 2024"  # Optional date field
+date = "2024-05-15"  # Required: ISO 8601 date format (YYYY-MM-DD)
 ```
 
 #### Extras Section
@@ -65,11 +65,13 @@ The optional `extras` section allows you to showcase additional content like:
 - Video recordings
 - Appendix materials
 
+Extras are automatically sorted by date (most recent first). If more than 5 items are present, the additional items will be hidden behind an expandable "Show more" button.
+
 Each extra item supports:
 - `label`: Display text for the item
 - `url`: Link to the resource
 - `icon`: FontAwesome icon class
-- `date`: (Optional) Date to display with the item
+- `date`: **Required** - Date in ISO 8601 format (YYYY-MM-DD) for sorting
 
 ## 📁 Project Structure
 

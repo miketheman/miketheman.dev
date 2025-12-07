@@ -51,16 +51,17 @@ icon = "fa-brands fa-twitter"
 
 # Extras Section (Optional)
 # Additional content like presentations, talks, resources, etc.
-# This section will appear below the main links with a heading.
+# Extras are sorted by date (most recent first). If more than 5 items,
+# additional ones are hidden behind an expandable "Show more" button.
 
 [[extras]]
 label = "PyCon 2024 - Building Better Python Packages"
 url = "https://example.com/slides"
 icon = "fa-solid fa-presentation"
-date = "2024-05-15"  # Optional: Date string in any format (e.g., "2024-05-15" or "May 15, 2024")
+date = "2024-05-15"  # Required: ISO 8601 date format (YYYY-MM-DD)
 
 [[extras]]
 label = "Conference Talk Recording"
 url = "https://youtube.com/watch?v=example"
 icon = "fa-brands fa-youtube"
-date = "2024-06-20"  # Optional: Can be omitted if date is not applicable
+date = "2024-06-20"  # Required: ISO 8601 date format (YYYY-MM-DD)

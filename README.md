@@ -8,6 +8,7 @@ A modern, responsive personal website generator that creates a beautiful "link i
 - **Responsive Design**: Looks great on desktop and mobile devices
 - **Dark Mode Support**: Automatically adapts to user's system preference
 - **Easy Configuration**: Simple TOML file for all content and links
+- **Extras Section**: Optional section for presentations, talks, and additional resources
 - **Fast Generation**: Uses Python with Jinja2 templating
 - **GitHub Actions Deploy**: Automated deployment to GitHub Pages
 
@@ -47,7 +48,30 @@ avatar = "https://yoursite.com/avatar.png"
 url = "https://github.com/yourusername"
 label = "GitHub"
 icon = "fa-brands fa-github"
+
+# Optional: Add extras section for presentations, talks, resources, etc.
+[[extras]]
+label = "PyCon 2024 - My Talk"
+url = "https://example.com/slides"
+icon = "fa-solid fa-presentation"
+date = "2024-05-15"  # Required: ISO 8601 date format (YYYY-MM-DD)
 ```
+
+#### Extras Section
+
+The optional `extras` section allows you to showcase additional content like:
+- Conference presentations and talks
+- Slide decks and resources
+- Video recordings
+- Appendix materials
+
+Extras are automatically sorted by date (most recent first). If more than 5 items are present, the additional items will be hidden behind an expandable "Show more" button.
+
+Each extra item supports:
+- `label`: Display text for the item
+- `url`: Link to the resource
+- `icon`: FontAwesome icon class
+- `date`: **Required** - Date in ISO 8601 format (YYYY-MM-DD) for sorting
 
 ## 📁 Project Structure
 
@@ -73,4 +97,5 @@ Deployment is handled automatically via GitHub Actions when you push to the main
 - **Styling**: Modify the CSS in `templates/index.html.j2`
 - **Layout**: Update the Jinja2 template structure
 - **Links**: Add/remove social links in `metadata.toml`
+- **Extras**: Add optional extras section for presentations and resources
 - **Avatar**: Replace with your own QR code using `avatar.py`

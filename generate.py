@@ -24,6 +24,41 @@ def generate_html(metadata):
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("index.html.j2")
 
+    # Initialize extras variables
+    visible_extras = []
+    expandable_extras = []
+
+    # Sort extras by date (most recent first) if they exist
+    if "extras" in metadata and metadata["extras"]:
+        # Validate extras have required date field and parse dates once
+        parsed_extras = []
+        for i, extra in enumerate(metadata["extras"]):
+            if "date" not in extra:
+                raise ValueError(
+                    f"Extras item {i+1} ('{extra.get('label', 'unknown')}') is missing required 'date' field"
+                )
+            # Validate date format and store parsed date
+            try:
+                parsed_date = datetime.datetime.strptime(extra["date"], "%Y-%m-%d")
+                parsed_extras.append((parsed_date, extra))
+            except ValueError:
+                raise ValueError(
+                    f"Extras item {i+1} ('{extra.get('label', 'unknown')}') has invalid date format. "
+                    f"Expected ISO 8601 format (YYYY-MM-DD), got: {extra['date']}"
+                )
+        
+        # Sort by parsed date (most recent first)
+        parsed_extras.sort(key=lambda x: x[0], reverse=True)
+        metadata["extras"] = [extra for _, extra in parsed_extras]
+        
+        # Split extras into visible and expandable groups
+        visible_extras = metadata["extras"][:5]
+        expandable_extras = metadata["extras"][5:] if len(metadata["extras"]) > 5 else []
+    
+    # Add extras to metadata
+    metadata["visible_extras"] = visible_extras
+    metadata["expandable_extras"] = expandable_extras
+
     # Add additional context for the template
     context = {
         **metadata,

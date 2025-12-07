@@ -7,24 +7,15 @@ on:
 
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: write
 
 jobs:
   deploy:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          persist-credentials: false
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
@@ -35,11 +26,10 @@ jobs:
       - name: Build site
         run: uv run generate.py
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
-        with:
-          path: dist
-
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
-        id: deployment
+        uses: JamesIves/github-pages-deploy-action@132898c54c57bf7b8c7e47f9dc77f3c350f477ee # v4.7.4
+        with:
+          folder: dist
+          branch: gh-pages
+          clean-exclude: pr-preview/
+          force: false

@@ -1,0 +1,36 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+# Use pull_request instead of pull_request_target for security
+# This ensures untrusted code from forks runs with limited permissions
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "generate.py.lock"
+        if: github.event.action != 'closed'
+
+      - name: Build site
+        run: uv run generate.py
+        if: github.event.action != 'closed'
+
+      - name: Deploy PR preview
+        uses: rossjrw/pr-preview-action@f31d5aa7b364955ea86228b9dcd346dc3f29c408 # v1.4.8
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview

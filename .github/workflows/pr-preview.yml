@@ -1,0 +1,94 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy-preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "generate.py.lock"
+
+      - name: Build site
+        run: uv run generate.py
+
+      - name: Deploy PR preview
+        uses: rossjrw/pr-preview-action@f31d5aa7b364955ea86228b9dcd346dc3f29c408 # v1.4.8
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update PR description with preview URL
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            // Use custom domain if available, otherwise fall back to github.io
+            const baseUrl = 'https://miketheman.dev';
+            const previewUrl = `${baseUrl}/pr-preview/pr-${prNumber}/`;
+            
+            const currentBody = context.payload.pull_request.body || '';
+            
+            // Check if preview URL already exists in description
+            const previewMarker = '<!-- PR_PREVIEW_URL -->';
+            const previewSection = `\n\n${previewMarker}\n## 🔍 Preview\n\nView the preview of this PR at: ${previewUrl}`;
+            
+            let newBody;
+            if (currentBody.includes(previewMarker)) {
+              // Replace existing preview section
+              newBody = currentBody.replace(
+                new RegExp(`${previewMarker}[\\s\\S]*`),
+                previewSection
+              );
+            } else {
+              // Append new preview section
+              newBody = currentBody + previewSection;
+            }
+            
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: newBody
+            });
+
+  cleanup-preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Remove PR preview
+        uses: rossjrw/pr-preview-action@f31d5aa7b364955ea86228b9dcd346dc3f29c408 # v1.4.8
+        with:
+          source-dir: dist
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: remove
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

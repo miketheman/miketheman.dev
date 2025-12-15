@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Primary Meta Tags -->
+        <title>Mike Fiedler - Code Gardener</title>
+        <meta name="title" content="Mike Fiedler - Code Gardener">
+        <meta name="description" content="Building better software, one commit at a time. Open source contributor and Python enthusiast.">
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://miketheman.dev">
+        <meta property="og:title" content="Mike Fiedler - Code Gardener">
+        <meta property="og:description" content="Building better software, one commit at a time. Open source contributor and Python enthusiast.">
+        <meta property="og:image" content="https://miketheman.dev/avatar.png">
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://miketheman.dev">
+        <meta property="twitter:title" content="Mike Fiedler - Code Gardener">
+        <meta property="twitter:description" content="Building better software, one commit at a time. Open source contributor and Python enthusiast.">
+        <meta property="twitter:image" content="https://miketheman.dev/avatar.png">
+        <meta property="twitter:creator" content="">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="https://miketheman.dev/avatar.png">
+        <!-- Font Awesome -->
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+        <!-- Verification -->
+        <link rel="me" href="https://hachyderm.io/@miketheman">
+        <style>
+    :root {
+      --bg-color: #fafafa;
+      --text-color: #1a1a1a;
+      --link-bg: #f0f0f0;
+      --link-hover: #e0e0e0;
+      --secondary-text-color: #666;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1a1a1a;
+        --text-color: #fafafa;
+        --link-bg: #2a2a2a;
+        --link-hover: #3a3a3a;
+        --secondary-text-color: #999;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar {
+      width: 100%;
+      max-width: 512px;
+      height: auto;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .avatar {
+        max-width: 300px;
+      }
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .title {
+      font-size: 18px;
+      color: var(--secondary-text-color);
+      margin: 0;
+    }
+
+    .description {
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--link-bg);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+    }
+
+    .link-item i {
+      font-size: 24px;
+    }
+
+    .link-item:hover {
+      background: var(--link-hover);
+    }
+
+    .extras-section {
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    .extras-heading {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    .extras-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .extra-link-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .extra-link-date {
+      font-size: 12px;
+      color: var(--secondary-text-color);
+    }
+
+    .extras-details {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .extras-summary {
+      padding: 12px;
+      background: var(--link-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      list-style: none;
+      text-align: center;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+
+    .extras-summary:hover {
+      background: var(--link-hover);
+    }
+
+    /* Hide details marker for WebKit browsers */
+    .extras-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .extras-expandable {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--secondary-text-color);
+    }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="profile">
+                <div class="avatar">
+                    <img src="https://miketheman.dev/avatar.png" alt="Mike Fiedler">
+                </div>
+                <h1 class="name">Mike Fiedler</h1>
+                <p class="title">Code Gardener</p>
+                <p class="description">Building better software, one commit at a time. Open source contributor and Python enthusiast.</p>
+                <div class="links">
+                    
+                        <a href="https://github.com/miketheman"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                    
+                        <a href="https://bsky.app/profile/miketheman.com"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands fa-bluesky"></i>
+                            <span>Bluesky</span>
+                        </a>
+                    
+                        <a href="https://hachyderm.io/@miketheman"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands fa-mastodon"></i>
+                            <span>Mastodon</span>
+                        </a>
+                    
+                        <a href="https://www.linkedin.com/in/miketheman/"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                    
+                        <a href="https://www.miketheman.net/"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-solid fa-blog"></i>
+                            <span>Personal Blog</span>
+                        </a>
+                    
+                        <a href="https://blog.pypi.org/"
+                           class="link-item"
+                           rel="noopener noreferrer"
+                           target="_blank">
+                            <i class="fa-brands fa-python"></i>
+                            <span>PyPI Blog</span>
+                        </a>
+                    
+                </div>
+                
+                <div class="extras-section">
+                    <div class="extras-heading">Extras</div>
+                    <div class="extras-links">
+                        
+                            <!-- Extra links use a wrapper div to support date display below label -->
+                            <a href="https://gist.github.com/miketheman/eb4e7214afd7372d5080d557f70a81bd"
+                               class="link-item"
+                               rel="noopener noreferrer"
+                               target="_blank">
+                                <i class="fa-solid fa-person-chalkboard"></i>
+                                <div class="extra-link-content">
+                                    <span>DevOpsDays Tel Aviv 2025 - Moving Mountains (companion)</span>
+                                    <span class="extra-link-date">2025-12-11</span>
+                                </div>
+                            </a>
+                        
+                        
+                    </div>
+                </div>
+                
+                <div class="footer">Updated December 15, 2025</div>
+            </div>
+        </div>
+    </body>
+</html>

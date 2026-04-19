@@ -58,16 +58,19 @@ jobs:
         # One-shot token URL — no creds persisted on disk (respects zizmor ratchet).
         # Only runs for same-repo PRs; fork PR tokens are read-only anyway.
         # The git diff guard ensures dep bumps that render identically produce no commit.
+        # Commit is attributed to the PR author so squash-merge doesn't add a Co-authored-by trailer.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_REF: ${{ github.head_ref }}
+          PR_USER_LOGIN: ${{ github.event.pull_request.user.login }}
+          PR_USER_ID: ${{ github.event.pull_request.user.id }}
         run: |
           if git diff --quiet assets/snapshots/; then
             echo "snapshot unchanged, skipping commit"
             exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "${PR_USER_LOGIN}"
+          git config user.email "${PR_USER_ID}+${PR_USER_LOGIN}@users.noreply.github.com"
           git add assets/snapshots/
           git commit -m "chore(snapshot): refresh visual snapshot"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \

@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
-# Use pull_request instead of pull_request_target for security
-# This ensures untrusted code from forks runs with limited permissions
+# pull_request (not pull_request_target) so fork PRs get a read-only token.
+# Same-repo PRs get write so the snapshot step can commit updated PNGs back.
 permissions:
   contents: write
   pull-requests: write
@@ -17,6 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          # Same-repo PRs: checkout the head branch so snapshot commit-back can push.
+          # Fork PRs: empty → default merge ref (commit-back step is skipped anyway).
+          ref: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.head_ref || '' }}
           persist-credentials: false
 
       - name: Install the latest version of uv
@@ -34,6 +37,44 @@ jobs:
       - name: Build site
         run: uv run --frozen src/generate.py
         if: github.event.action != 'closed'
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+        if: github.event.action != 'closed'
+
+      - name: Install Playwright chromium
+        # --with-deps always runs apt-get for system libs; browser download is skipped on cache hit.
+        run: uv run --frozen playwright install --with-deps chromium
+        if: github.event.action != 'closed'
+
+      - name: Capture visual snapshot
+        run: uv run --frozen src/snapshot.py
+        if: github.event.action != 'closed'
+
+      - name: Commit updated snapshot to PR branch
+        # One-shot token URL — no creds persisted on disk (respects zizmor ratchet).
+        # Only runs for same-repo PRs; fork PR tokens are read-only anyway.
+        # The git diff guard ensures dep bumps that render identically produce no commit.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if git diff --quiet assets/snapshots/; then
+            echo "snapshot unchanged, skipping commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/snapshots/
+          git commit -m "chore(snapshot): refresh visual snapshot"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "HEAD:${HEAD_REF}"
+        if: >-
+          github.event.action != 'closed' &&
+          github.event.pull_request.head.repo.full_name == github.repository
 
       - name: Deploy PR preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1

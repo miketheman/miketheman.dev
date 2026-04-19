@@ -12,6 +12,8 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    cooldown:
+      default-days: 7
 
   # Maintain Python dependencies
   - package-ecosystem: "pip"
@@ -25,3 +27,5 @@ updates:
     labels:
       - "dependencies"
       - "python"
+    cooldown:
+      default-days: 7

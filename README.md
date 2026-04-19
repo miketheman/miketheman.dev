@@ -15,6 +15,7 @@ A modern, responsive personal website generator that creates a beautiful "link i
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - [uv](https://docs.astral.sh/uv/) - Fast Python package manager
 - [just](https://github.com/casey/just) - Command runner (optional but recommended)
 
@@ -60,6 +61,7 @@ date = "2024-05-15"  # Required: ISO 8601 date format (YYYY-MM-DD)
 #### Extras Section
 
 The optional `extras` section allows you to showcase additional content like:
+
 - Conference presentations and talks
 - Slide decks and resources
 - Video recordings
@@ -68,6 +70,7 @@ The optional `extras` section allows you to showcase additional content like:
 Extras are automatically sorted by date (most recent first). If more than 5 items are present, the additional items will be hidden behind an expandable "Show more" button.
 
 Each extra item supports:
+
 - `label`: Display text for the item
 - `url`: Link to the resource
 - `icon`: FontAwesome icon class
@@ -75,7 +78,7 @@ Each extra item supports:
 
 ## 📁 Project Structure
 
-```
+```text
 ├── generate.py          # Main site generator
 ├── avatar.py           # QR code avatar generator
 ├── serve.py            # Development server

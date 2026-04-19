@@ -275,6 +275,16 @@
         .avatar { max-width: 320px; }
       }
 
+      /* Desktop: drop the rectangular mat frame; circular border hugs the portrait. */
+      @media (min-width: 640px) and (hover: hover) and (pointer: fine) {
+        .avatar {
+          background: transparent;
+          padding: 0;
+          border-radius: 50%;
+        }
+        .avatar::before { display: none; }
+      }
+
       .name {
         margin: 0;
         font-family: var(--font-display);

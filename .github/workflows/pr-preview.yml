@@ -38,6 +38,16 @@ jobs:
         run: uv run --frozen src/generate.py
         if: github.event.action != 'closed'
 
+      - name: Set up biome
+        uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
+        with:
+          version: 2.4.12
+        if: github.event.action != 'closed'
+
+      - name: Lint rendered HTML
+        run: biome check dist/
+        if: github.event.action != 'closed'
+
       - name: Cache Playwright browsers
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:

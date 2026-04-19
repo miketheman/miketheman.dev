@@ -24,11 +24,19 @@ This is a modern, responsive personal website generator that creates a beautiful
 │       └── pr-preview.yml      # PR preview deployment workflow
 ├── src/
 │   ├── generate.py             # Main site generator script
-│   ├── avatar.py               # QR code avatar generator script
-│   └── serve.py                # Development server script
+│   ├── avatar.py               # QR + portrait generator script
+│   ├── icons.py                # Font Awesome SVG fetcher (reads metadata.toml)
+│   ├── fonts.py                # Google Fonts self-hosting (woff2 + rewritten CSS)
+│   ├── serve.py                # Development server script
+│   └── snapshot.py             # Playwright visual-diff capture (dev dep)
 ├── assets/
 │   ├── me.jpg                  # Source photo for avatar generation
-│   └── avatar.png              # Generated QR code avatar (committed)
+│   ├── avatar.png              # QR with embedded portrait (mobile view, committed)
+│   ├── avatar-plain.png        # Plain circular portrait (desktop view, committed)
+│   ├── icons/                  # Font Awesome SVGs (brands/, solid/) — inlined at build time
+│   ├── fonts/                  # Self-hosted Google Fonts woff2 files
+│   ├── fonts.css               # Rewritten @font-face CSS — inlined into <style>
+│   └── snapshots/              # PR visual-diff baselines — desktop + mobile PNGs
 ├── templates/
 │   └── index.html.j2           # Jinja2 template for the main page
 ├── dist/                       # Generated website output (not committed)
@@ -36,6 +44,7 @@ This is a modern, responsive personal website generator that creates a beautiful
 ├── metadata.example.toml       # Example configuration
 ├── pyproject.toml              # Project metadata and dependencies (PEP 621)
 ├── uv.lock                     # Pinned dependency lockfile (managed by uv)
+├── .python-version             # Pinned Python (3.13)
 └── justfile                    # Task runner commands
 ```
 
@@ -54,7 +63,11 @@ Prefer the `just` recipes — they encode the canonical invocations:
 ```bash
 just build          # Generate the website
 just serve          # Build and start development server
-just avatar         # Regenerate QR code avatar from assets/me.jpg
+just avatar         # Regenerate avatar.png (QR) + avatar-plain.png (portrait)
+just icons          # Fetch Font Awesome SVGs referenced in metadata.toml
+just fonts          # Download + self-host Google Fonts into assets/fonts/
+just lint           # Build, then biome check dist/ (HTML/CSS/a11y lint)
+just snapshot       # Build, then capture desktop + mobile visual-diff PNGs
 just clean          # Clean generated files
 ```
 
@@ -64,6 +77,9 @@ Fallback (if `just` isn't available, or for ad-hoc invocation) — always run fr
 uv run src/generate.py
 uv run src/serve.py
 uv run src/avatar.py
+uv run src/icons.py
+uv run src/fonts.py
+uv run src/snapshot.py   # requires Playwright chromium: uv run playwright install chromium
 ```
 
 ### Build Process
@@ -71,7 +87,7 @@ uv run src/avatar.py
 1. `src/generate.py` reads `metadata.toml`
 2. Renders the Jinja2 template (`templates/index.html.j2`)
 3. Outputs to `dist/index.html`
-4. Copies `assets/avatar.png` → `dist/avatar.png` if present
+4. Copies `assets/avatar.png` and `assets/avatar-plain.png` → `dist/` if present
 
 ## Code Conventions
 
@@ -147,6 +163,7 @@ CI runs `uv sync --frozen` against `uv.lock` for reproducible builds. Dependabot
 - **generate.py**: `jinja2`
 - **avatar.py**: `qrcode[pil]` (includes PIL/Pillow)
 - **serve.py**: No external dependencies (uses stdlib only)
+- **snapshot.py**: `playwright` (dev-group only — not a runtime dep)
 
 ## Deployment
 
@@ -205,16 +222,25 @@ icon = "fa-brands fa-service"  # Font Awesome icon class
 ### Regenerating Avatar
 
 1. Replace `assets/me.jpg` with your own profile photo (same filename, or update `AVATAR_FILE_PATH` in `src/avatar.py`)
-2. Run: `just avatar` — produces `assets/avatar.png`
-3. Rebuild site: `just build` — copies it into `dist/`
+2. Run: `just avatar` — produces `assets/avatar.png` (QR) and `assets/avatar-plain.png` (portrait)
+3. Rebuild site: `just build` — copies both into `dist/`
 
 Note: The avatar.py script requires a personal photo file at the path you specify.
+
+### Refreshing Visual Snapshots
+
+After any template/CSS change, rebuild the `assets/snapshots/*.png` baselines so PR diffs reflect the intended view:
+
+1. `just snapshot` — renders desktop (800x1400) and mobile (390x844) full-page PNGs with the volatile `.footer` masked
+2. Commit the updated PNGs; GitHub's native rich image diff will show before/after on the PR
+
+CI also regenerates these automatically on PR open/sync and commits them back if they differ.
 
 ## Important Notes
 
 - **Generated Files**: The `dist/` directory contains generated files and should not be edited directly
 - **Avatar Source**: `src/avatar.py` reads from `assets/me.jpg` (tracked in the repo). Replace that file to change the embedded photo, or edit `AVATAR_FILE_PATH` in the script.
-- **Python Version**: Always ensure scripts are compatible with Python 3.13+
+- **Python Version**: Pinned to Python 3.13 via `.python-version` (Playwright's sync API segfaults on 3.14 due to a greenlet/freethreading interaction).
 - **uv Requirement**: Scripts run inside the project's `uv`-managed `.venv`. Invoke via `just <recipe>` (preferred) or `uv run src/<script>.py` from the repo root.
 - **Executable Scripts**: The `.py` scripts in `src/` are executable with proper shebangs
 - **Lock File**: `uv.lock` pins the full dependency tree; it's managed by `uv lock` / `uv sync` and used by CI for reproducible builds

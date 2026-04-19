@@ -33,13 +33,20 @@ Then:
 # Using Just (recommended)
 just build          # Generate the website
 just serve          # Build and start development server
-just avatar         # Generate new QR code avatar
+just avatar         # Regenerate avatar.png (QR) and avatar-plain.png (portrait)
+just icons          # Fetch Font Awesome SVGs referenced in metadata.toml
+just fonts          # Download + self-host Google Fonts into assets/fonts/
+just lint           # Build, then run biome against dist/index.html (HTML/CSS/a11y lint)
+just snapshot       # Build, then capture desktop + mobile PNG snapshots for PR visual diffs
 just clean          # Clean generated files
 
 # Or run scripts directly (from repo root)
 uv run src/generate.py  # Generate the website
 uv run src/serve.py     # Start development server
-uv run src/avatar.py    # Generate QR code avatar from assets/me.jpg
+uv run src/avatar.py    # Generate avatars from assets/me.jpg
+uv run src/icons.py     # Download Font Awesome SVGs for metadata.toml icons
+uv run src/fonts.py     # Download Google Fonts woff2 + rewrite CSS to self-host
+uv run src/snapshot.py  # Capture visual-diff snapshots (requires Playwright chromium)
 ```
 
 The resulting website will be created in the `dist/` directory.
@@ -87,22 +94,32 @@ Each extra item supports:
 ## 📁 Project Structure
 
 ```text
-├── pyproject.toml      # Project metadata and dependencies
-├── uv.lock             # Pinned dependency lockfile
-├── justfile            # Task runner commands
-├── metadata.toml       # Site configuration
-├── src/                # Scripts (run from repo root via uv run)
-│   ├── generate.py     # Main site generator
-│   ├── avatar.py       # QR code avatar generator
-│   └── serve.py        # Development server
-├── assets/             # Source + generated images
-│   ├── me.jpg          # Source photo for avatar
-│   └── avatar.png      # Generated QR code avatar
-├── templates/          # Jinja2 templates
-│   └── index.html.j2   # Main page template
-└── dist/               # Generated website (gitignored)
+├── pyproject.toml        # Project metadata and dependencies (runtime + dev)
+├── uv.lock               # Pinned dependency lockfile
+├── .python-version       # Pinned Python (3.13)
+├── justfile              # Task runner commands
+├── metadata.toml         # Site configuration
+├── src/                  # Scripts (run from repo root via uv run)
+│   ├── generate.py       # Main site generator
+│   ├── avatar.py         # QR + portrait generator
+│   ├── icons.py          # Font Awesome SVG fetcher (reads metadata.toml)
+│   ├── fonts.py          # Google Fonts self-hosting (woff2 + rewritten CSS)
+│   ├── serve.py          # Development server
+│   └── snapshot.py       # Playwright visual-diff capture (dev dep)
+├── assets/               # Source + generated images (committed)
+│   ├── me.jpg            # Source photo for avatar
+│   ├── avatar.png        # QR with embedded portrait (mobile view)
+│   ├── avatar-plain.png  # Plain circular portrait (desktop view)
+│   ├── icons/            # Font Awesome SVGs (brands/ + solid/) — inlined at build time
+│   ├── fonts/            # Self-hosted woff2 files — copied to dist/fonts/ at build
+│   ├── fonts.css         # Rewritten @font-face CSS — inlined into <style> at build
+│   └── snapshots/        # PR visual-diff baselines (desktop + mobile PNGs)
+├── templates/            # Jinja2 templates
+│   └── index.html.j2     # Main page template
+└── dist/                 # Generated website (gitignored)
     ├── index.html
-    └── avatar.png
+    ├── avatar.png
+    └── avatar-plain.png
 ```
 
 ## 🚀 Deploy
@@ -112,6 +129,10 @@ Deployment is handled automatically via GitHub Actions when you push to the main
 ### Pull Request Previews
 
 When you create a pull request, a preview of your changes is automatically deployed to a unique URL and linked in the PR description. This allows you to review changes before merging. The preview is automatically cleaned up when the PR is closed.
+
+### Visual Diffs
+
+The preview workflow also regenerates `assets/snapshots/*.png` via Playwright (desktop + mobile viewports). If the rendered snapshot differs from the committed baseline, the workflow commits the updated PNG back to the PR branch — GitHub's native rich image diff then shows a swipe/2-up comparison on the PR's Files tab.
 
 ## 🎨 Customization
 

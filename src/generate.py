@@ -6,7 +6,24 @@ import tomllib
 
 from jinja2 import Environment, FileSystemLoader
 
+from icons import ICON_CACHE, parse_icon
+
 EXTRAS_VISIBLE_COUNT = 5  # remaining extras hide behind "Show more" in the template
+
+
+def icon_svg(icon_class):
+    """Read a cached Font Awesome SVG for inlining in the template.
+
+    Icons are paired with a visible label, so they're marked aria-hidden
+    for screen readers (the adjacent <span> carries the accessible name).
+    """
+    style, name = parse_icon(icon_class)
+    path = ICON_CACHE / style / f"{name}.svg"
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Icon SVG missing: {path}. Run `just icons` to download."
+        )
+    return path.read_text().replace("<svg ", '<svg aria-hidden="true" ', 1)
 
 
 def read_metadata():
@@ -15,8 +32,19 @@ def read_metadata():
         return tomllib.load(f)
 
 
+def read_fonts_css():
+    path = "assets/fonts.css"
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f"{path} missing. Run `just fonts` to download fonts."
+        )
+    with open(path) as f:
+        return f.read()
+
+
 def generate_html(metadata):
     env = Environment(loader=FileSystemLoader("templates"))
+    env.globals["icon_svg"] = icon_svg
     template = env.get_template("index.html.j2")
 
     visible_extras = []
@@ -50,6 +78,7 @@ def generate_html(metadata):
     context = {
         **metadata,
         "updated_date": datetime.datetime.now().strftime("%B %d, %Y"),
+        "fonts_css": read_fonts_css(),
     }
 
     html = template.render(**context)
@@ -64,11 +93,22 @@ def main():
         metadata = read_metadata()
         generate_html(metadata)
 
-        if os.path.exists("assets/avatar.png"):
-            shutil.copy("assets/avatar.png", "dist/avatar.png")
-            print("✅ Website generated successfully in dist/")
+        missing = []
+        for name in ("avatar.png", "avatar-plain.png"):
+            try:
+                shutil.copy(f"assets/{name}", f"dist/{name}")
+            except FileNotFoundError:
+                missing.append(name)
+
+        if os.path.isdir("assets/fonts"):
+            shutil.copytree("assets/fonts", "dist/fonts", dirs_exist_ok=True)
         else:
-            print("⚠️  Website generated, but assets/avatar.png not found. Run `just avatar` to generate it.")
+            missing.append("fonts/")
+
+        if missing:
+            print(f"⚠️  Website generated, but missing: {', '.join(missing)}. Run `just avatar` / `just fonts` to regenerate.")
+        else:
+            print("✅ Website generated successfully in dist/")
 
     except FileNotFoundError as e:
         print(f"❌ Error: {e}")

@@ -32,6 +32,14 @@ jobs:
       - name: Build site
         run: uv run --frozen src/generate.py
 
+      - name: Set up biome
+        uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
+        with:
+          version: 2.4.12
+
+      - name: Lint rendered HTML
+        run: biome check dist/
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f # v4.8.0
         with:

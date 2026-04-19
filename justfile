@@ -19,6 +19,21 @@ avatar:
     uv run src/avatar.py
     @echo "✅ Avatar generated"
 
+# Fetch Font Awesome SVGs for any icons referenced in metadata.toml
+icons:
+    @echo "📦 Fetching icon SVGs..."
+    uv run src/icons.py
+
+# Download and self-host Google Fonts (writes assets/fonts/*.woff2 and assets/fonts.css)
+fonts:
+    @echo "📦 Fetching fonts..."
+    uv run src/fonts.py
+
+# Lint the rendered HTML (runs biome against dist/index.html)
+lint: build
+    @echo "🔍 Linting rendered HTML..."
+    biome check dist/
+
 # Render a visual snapshot of the built site for PR diffs
 snapshot: build
     @echo "📸 Capturing visual snapshot..."
@@ -27,7 +42,7 @@ snapshot: build
 # Clean generated files
 clean:
     @echo "🧹 Cleaning generated files..."
-    rm -f dist/index.html dist/avatar.png
+    rm -f dist/index.html dist/avatar*.png
     @echo "✅ Cleaned"
 
 # Show available recipes

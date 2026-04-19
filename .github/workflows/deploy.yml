@@ -24,10 +24,13 @@ jobs:
         with:
           enable-cache: true
           prune-cache: false
-          cache-dependency-glob: "generate.py.lock"
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install dependencies
+        run: uv sync --frozen
 
       - name: Build site
-        run: uv run generate.py
+        run: uv run --frozen src/generate.py
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f # v4.8.0

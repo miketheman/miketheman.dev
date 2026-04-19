@@ -1,15 +1,12 @@
-#!/usr/bin/env -S uv run --script
-# /// script
-# requires-python = ">=3.13"
-# dependencies = [
-#   "jinja2",
-# ]
-# ///
+#!/usr/bin/env python3
 import datetime
+import os
 import shutil
 import tomllib
 
 from jinja2 import Environment, FileSystemLoader
+
+EXTRAS_VISIBLE_COUNT = 5  # remaining extras hide behind "Show more" in the template
 
 
 def read_metadata():
@@ -19,25 +16,19 @@ def read_metadata():
 
 
 def generate_html(metadata):
-    """Generate HTML from metadata using Jinja2 template"""
-    # Set up Jinja2 environment
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("index.html.j2")
 
-    # Initialize extras variables
     visible_extras = []
     expandable_extras = []
 
-    # Sort extras by date (most recent first) if they exist
     if "extras" in metadata and metadata["extras"]:
-        # Validate extras have required date field and parse dates once
         parsed_extras = []
         for i, extra in enumerate(metadata["extras"]):
             if "date" not in extra:
                 raise ValueError(
                     f"Extras item {i+1} ('{extra.get('label', 'unknown')}') is missing required 'date' field"
                 )
-            # Validate date format and store parsed date
             try:
                 parsed_date = datetime.datetime.strptime(extra["date"], "%Y-%m-%d")
                 parsed_extras.append((parsed_date, extra))
@@ -46,48 +37,38 @@ def generate_html(metadata):
                     f"Extras item {i+1} ('{extra.get('label', 'unknown')}') has invalid date format. "
                     f"Expected ISO 8601 format (YYYY-MM-DD), got: {extra['date']}"
                 )
-        
-        # Sort by parsed date (most recent first)
+
         parsed_extras.sort(key=lambda x: x[0], reverse=True)
         metadata["extras"] = [extra for _, extra in parsed_extras]
-        
-        # Split extras into visible and expandable groups
-        visible_extras = metadata["extras"][:5]
-        expandable_extras = metadata["extras"][5:] if len(metadata["extras"]) > 5 else []
-    
-    # Add extras to metadata
+
+        visible_extras = metadata["extras"][:EXTRAS_VISIBLE_COUNT]
+        expandable_extras = metadata["extras"][EXTRAS_VISIBLE_COUNT:]
+
     metadata["visible_extras"] = visible_extras
     metadata["expandable_extras"] = expandable_extras
 
-    # Add additional context for the template
     context = {
         **metadata,
         "updated_date": datetime.datetime.now().strftime("%B %d, %Y"),
     }
 
-    # Render template with context
     html = template.render(**context)
-
-    # Write the generated HTML to a file
     with open("dist/index.html", "w") as f:
         f.write(html)
 
 
 def main():
     try:
-        # Ensure dist directory exists
-        import os
         os.makedirs("dist", exist_ok=True)
 
         metadata = read_metadata()
         generate_html(metadata)
 
-        # Copy avatar.png to dist if it exists
-        if os.path.exists("avatar.png"):
-            shutil.copy("avatar.png", "dist/avatar.png")
+        if os.path.exists("assets/avatar.png"):
+            shutil.copy("assets/avatar.png", "dist/avatar.png")
             print("✅ Website generated successfully in dist/")
         else:
-            print("⚠️  Website generated, but avatar.png not found. Run ./avatar.py to generate it.")
+            print("⚠️  Website generated, but assets/avatar.png not found. Run `just avatar` to generate it.")
 
     except FileNotFoundError as e:
         print(f"❌ Error: {e}")

@@ -23,11 +23,16 @@ jobs:
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
-          cache-dependency-glob: "generate.py.lock"
+          prune-cache: false
+          cache-dependency-glob: "uv.lock"
+        if: github.event.action != 'closed'
+
+      - name: Install dependencies
+        run: uv sync --frozen
         if: github.event.action != 'closed'
 
       - name: Build site
-        run: uv run generate.py
+        run: uv run --frozen src/generate.py
         if: github.event.action != 'closed'
 
       - name: Deploy PR preview

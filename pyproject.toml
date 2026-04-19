@@ -1,0 +1,9 @@
+[project]
+name = "miketheman-dev"
+version = "0.1.0"
+description = "Static site generator for miketheman.dev"
+requires-python = ">=3.13"
+dependencies = [
+    "jinja2",
+    "qrcode[pil]",
+]

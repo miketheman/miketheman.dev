@@ -7,11 +7,11 @@ This is a modern, responsive personal website generator that creates a beautiful
 ## Technology Stack
 
 - **Python**: 3.13+ (minimum version required)
-- **Package Manager**: [uv](https://docs.astral.sh/uv/) - Fast Python package manager with inline script metadata
+- **Package Manager**: [uv](https://docs.astral.sh/uv/) - Fast Python package manager; deps declared in `pyproject.toml`, pinned in `uv.lock`
 - **Templating**: Jinja2 for HTML generation
 - **Task Runner**: [just](https://github.com/casey/just) (optional but recommended)
 - **Deployment**: GitHub Actions to GitHub Pages
-- **Key Libraries**: 
+- **Key Libraries**:
   - `jinja2` - Template rendering
   - `qrcode[pil]` - QR code generation with PIL support
 
@@ -20,75 +20,66 @@ This is a modern, responsive personal website generator that creates a beautiful
 ```
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # GitHub Actions deployment workflow
+│       ├── deploy.yml          # GitHub Actions deployment workflow
+│       └── pr-preview.yml      # PR preview deployment workflow
+├── src/
+│   ├── generate.py             # Main site generator script
+│   ├── avatar.py               # QR code avatar generator script
+│   └── serve.py                # Development server script
+├── assets/
+│   ├── me.jpg                  # Source photo for avatar generation
+│   └── avatar.png              # Generated QR code avatar (committed)
 ├── templates/
-│   └── index.html.j2          # Jinja2 template for the main page
-├── dist/                      # Generated website output (not committed)
-├── generate.py                # Main site generator script
-├── avatar.py                  # QR code avatar generator script
-├── serve.py                   # Development server script
-├── metadata.toml              # Site configuration and content
-├── metadata.example.toml      # Example configuration
-├── avatar.png                 # Generated QR code avatar
-└── justfile                   # Task runner commands
+│   └── index.html.j2           # Jinja2 template for the main page
+├── dist/                       # Generated website output (not committed)
+├── metadata.toml               # Site configuration and content
+├── metadata.example.toml       # Example configuration
+├── pyproject.toml              # Project metadata and dependencies (PEP 621)
+├── uv.lock                     # Pinned dependency lockfile (managed by uv)
+└── justfile                    # Task runner commands
 ```
 
 ## Development Workflow
 
 ### Building and Testing
 
-All Python scripts use inline script metadata (PEP 723) and should be executed with `uv run`:
+Dependencies live in `pyproject.toml` and are pinned in `uv.lock`. First-time setup (and after any lockfile change):
 
 ```bash
-# Generate the website
-./generate.py
-# or
-uv run generate.py
-
-# Start development server (builds first if needed)
-./serve.py
-# or
-uv run serve.py
-
-# Generate new QR code avatar (requires personal photo)
-./avatar.py
-# or
-uv run avatar.py
+uv sync --frozen    # Install pinned deps into .venv
 ```
 
-### Using just (Task Runner)
-
-When `just` is available, use these convenient commands:
+Prefer the `just` recipes — they encode the canonical invocations:
 
 ```bash
 just build          # Generate the website
 just serve          # Build and start development server
-just avatar         # Generate new QR code avatar
+just avatar         # Regenerate QR code avatar from assets/me.jpg
 just clean          # Clean generated files
+```
+
+Fallback (if `just` isn't available, or for ad-hoc invocation) — always run from the repo root:
+
+```bash
+uv run src/generate.py
+uv run src/serve.py
+uv run src/avatar.py
 ```
 
 ### Build Process
 
-1. The `generate.py` script reads `metadata.toml`
+1. `src/generate.py` reads `metadata.toml`
 2. Renders the Jinja2 template (`templates/index.html.j2`)
 3. Outputs to `dist/index.html`
-4. Copies `avatar.png` to `dist/` if it exists
+4. Copies `assets/avatar.png` → `dist/avatar.png` if present
 
 ## Code Conventions
 
 ### Python Style
 
 - **Python Version**: Always use features compatible with Python 3.13+
-- **Script Metadata**: All executable Python scripts use inline script metadata (PEP 723) in the shebang format:
-  ```python
-  #!/usr/bin/env -S uv run --script
-  # /// script
-  # requires-python = ">=3.13"
-  # dependencies = [
-  #   "package-name",
-  # ]
-  # ///
-  ```
+- **Script Shebang**: `#!/usr/bin/env python3`. Scripts are invoked via `just <recipe>` (preferred) or `uv run src/<script>.py` (from repo root) so they execute inside the project's `.venv`.
+- **Working Directory**: Scripts use cwd-relative paths (`metadata.toml`, `templates/`, `assets/`, `dist/`). Always invoke from the repo root.
 - **Error Handling**: Use try-except blocks with user-friendly error messages (with emoji prefixes)
 - **Console Output**: Use emoji prefixes for status messages:
   - ✅ for success
@@ -145,20 +136,11 @@ Edit `generate.py`:
 
 ### Adding New Dependencies
 
-When adding new Python dependencies:
+1. Add the package to `[project.dependencies]` in `pyproject.toml`.
+2. Run `uv lock` to refresh `uv.lock`.
+3. Commit both `pyproject.toml` and `uv.lock`.
 
-1. Update the inline script metadata in the relevant `.py` file:
-   ```python
-   # /// script
-   # requires-python = ">=3.13"
-   # dependencies = [
-   #   "existing-package",
-   #   "new-package",
-   # ]
-   # ///
-   ```
-
-2. The `generate.py.lock` file is automatically managed by `uv` and doesn't need manual updates. It's used by GitHub Actions for reproducible builds.
+CI runs `uv sync --frozen` against `uv.lock` for reproducible builds. Dependabot's `uv` ecosystem keeps the lockfile current on a weekly cadence.
 
 ### Current Dependencies
 
@@ -174,10 +156,10 @@ When adding new Python dependencies:
 - **Process**: GitHub Actions workflow (`.github/workflows/deploy.yml`)
 - **Steps**:
   1. Checkout code
-  2. Install uv
-  3. Build site with `uv run generate.py`
-  4. Upload artifact
-  5. Deploy to GitHub Pages
+  2. Install uv (cached on `uv.lock`)
+  3. `uv sync --frozen` to install pinned deps
+  4. Build site with `uv run --frozen src/generate.py`
+  5. Deploy `dist/` to GitHub Pages
 
 ### Manual Deployment
 
@@ -187,8 +169,8 @@ Can be triggered via GitHub Actions `workflow_dispatch` event.
 
 Currently, this project doesn't have automated tests. When making changes:
 
-1. Build the site locally: `./generate.py`
-2. Test with development server: `./serve.py`
+1. Build the site locally: `just build`
+2. Test with development server: `just serve`
 3. Verify the generated HTML in `dist/index.html`
 4. Check that the site displays correctly in a browser
 5. Verify all links work as expected
@@ -199,8 +181,8 @@ Currently, this project doesn't have automated tests. When making changes:
 
 Edit `metadata.toml` and rebuild:
 ```bash
-./generate.py
-./serve.py  # Test locally
+just build
+just serve  # Test locally
 ```
 
 ### Adding a New Social Link
@@ -216,23 +198,23 @@ icon = "fa-brands fa-service"  # Font Awesome icon class
 ### Changing Site Design
 
 1. Edit `templates/index.html.j2`
-2. Rebuild and test: `./generate.py && ./serve.py`
+2. Rebuild and test: `just serve` (builds first, then serves)
 3. Check responsive design on different screen sizes
 4. Verify dark mode support
 
 ### Regenerating Avatar
 
-1. Edit the hardcoded `AVATAR_FILE_PATH` variable in `avatar.py` (currently points to a specific Dropbox location) to point to your own profile photo file path
-2. Run: `./avatar.py`
-3. Rebuild site: `./generate.py`
+1. Replace `assets/me.jpg` with your own profile photo (same filename, or update `AVATAR_FILE_PATH` in `src/avatar.py`)
+2. Run: `just avatar` — produces `assets/avatar.png`
+3. Rebuild site: `just build` — copies it into `dist/`
 
 Note: The avatar.py script requires a personal photo file at the path you specify.
 
 ## Important Notes
 
 - **Generated Files**: The `dist/` directory contains generated files and should not be edited directly
-- **Avatar File**: The `avatar.py` script has a hardcoded path to a personal photo file that needs to be updated before use. Edit the `AVATAR_FILE_PATH` variable to point to your own profile photo.
+- **Avatar Source**: `src/avatar.py` reads from `assets/me.jpg` (tracked in the repo). Replace that file to change the embedded photo, or edit `AVATAR_FILE_PATH` in the script.
 - **Python Version**: Always ensure scripts are compatible with Python 3.13+
-- **uv Requirement**: All scripts are designed to run with `uv` for consistent dependency management
-- **Executable Scripts**: All `.py` scripts in the root are executable with proper shebangs
-- **Lock Files**: `generate.py.lock` is automatically managed by `uv` and tracks dependencies for the deployment workflow
+- **uv Requirement**: Scripts run inside the project's `uv`-managed `.venv`. Invoke via `just <recipe>` (preferred) or `uv run src/<script>.py` from the repo root.
+- **Executable Scripts**: The `.py` scripts in `src/` are executable with proper shebangs
+- **Lock File**: `uv.lock` pins the full dependency tree; it's managed by `uv lock` / `uv sync` and used by CI for reproducible builds

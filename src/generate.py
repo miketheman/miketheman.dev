@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import datetime
+import json
 import os
 import shutil
 import tomllib
+
+HUMAN_JSON_VERSION = "0.1.1"
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -86,12 +89,20 @@ def generate_html(metadata):
         f.write(html)
 
 
+def generate_human_json(metadata):
+    payload = {"version": HUMAN_JSON_VERSION, **metadata["human"]}
+    with open("dist/human.json", "w") as f:
+        json.dump(payload, f, indent=2)
+        f.write("\n")
+
+
 def main():
     try:
         os.makedirs("dist", exist_ok=True)
 
         metadata = read_metadata()
         generate_html(metadata)
+        generate_human_json(metadata)
 
         missing = []
         for name in ("avatar.png", "avatar-plain.png"):

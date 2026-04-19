@@ -7,3 +7,8 @@ dependencies = [
     "jinja2",
     "qrcode[pil]",
 ]
+
+[dependency-groups]
+dev = [
+    "playwright",
+]

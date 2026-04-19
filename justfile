@@ -19,6 +19,11 @@ avatar:
     uv run src/avatar.py
     @echo "✅ Avatar generated"
 
+# Render a visual snapshot of the built site for PR diffs
+snapshot: build
+    @echo "📸 Capturing visual snapshot..."
+    uv run src/snapshot.py
+
 # Clean generated files
 clean:
     @echo "🧹 Cleaning generated files..."

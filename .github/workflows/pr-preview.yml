@@ -17,9 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          # Same-repo PRs: checkout the head branch so snapshot commit-back can push.
-          # Fork PRs: empty → default merge ref (commit-back step is skipped anyway).
-          ref: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.head_ref || '' }}
+          # Same-repo open PRs: checkout the head branch so snapshot commit-back can push.
+          # Fork PRs or closed PRs: empty → default merge ref (the head branch may be
+          # deleted on close, and the commit-back step is skipped anyway).
+          ref: ${{ github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref || '' }}
           persist-credentials: false
 
       - name: Install the latest version of uv

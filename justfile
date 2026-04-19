@@ -5,18 +5,18 @@ default:
 # Generate the website
 build:
     @echo "🔨 Building website..."
-    ./generate.py
+    uv run src/generate.py
     @echo "✅ Website built in dist/"
 
 # Start development server
 serve: build
     @echo "🚀 Starting development server..."
-    ./serve.py
+    uv run src/serve.py
 
 # Generate new avatar (requires personal photo)
 avatar:
     @echo "🎨 Generating QR code avatar..."
-    ./avatar.py
+    uv run src/avatar.py
     @echo "✅ Avatar generated"
 
 # Clean generated files

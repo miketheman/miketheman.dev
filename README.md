@@ -21,6 +21,14 @@ A modern, responsive personal website generator that creates a beautiful "link i
 
 ### Build the Site
 
+First-time setup (or after `uv.lock` changes):
+
+```bash
+uv sync --frozen    # Install pinned dependencies into .venv
+```
+
+Then:
+
 ```bash
 # Using Just (recommended)
 just build          # Generate the website
@@ -28,10 +36,10 @@ just serve          # Build and start development server
 just avatar         # Generate new QR code avatar
 just clean          # Clean generated files
 
-# Or run scripts directly
-./generate.py       # Generate the website
-./serve.py          # Start development server
-./avatar.py         # Generate QR code avatar (requires personal photo)
+# Or run scripts directly (from repo root)
+uv run src/generate.py  # Generate the website
+uv run src/serve.py     # Start development server
+uv run src/avatar.py    # Generate QR code avatar from assets/me.jpg
 ```
 
 The resulting website will be created in the `dist/` directory.
@@ -79,14 +87,20 @@ Each extra item supports:
 ## 📁 Project Structure
 
 ```text
-├── generate.py          # Main site generator
-├── avatar.py           # QR code avatar generator
-├── serve.py            # Development server
+├── pyproject.toml      # Project metadata and dependencies
+├── uv.lock             # Pinned dependency lockfile
 ├── justfile            # Task runner commands
 ├── metadata.toml       # Site configuration
+├── src/                # Scripts (run from repo root via uv run)
+│   ├── generate.py     # Main site generator
+│   ├── avatar.py       # QR code avatar generator
+│   └── serve.py        # Development server
+├── assets/             # Source + generated images
+│   ├── me.jpg          # Source photo for avatar
+│   └── avatar.png      # Generated QR code avatar
 ├── templates/          # Jinja2 templates
-│   └── index.html.j2  # Main page template
-└── dist/              # Generated website
+│   └── index.html.j2   # Main page template
+└── dist/               # Generated website (gitignored)
     ├── index.html
     └── avatar.png
 ```
@@ -105,4 +119,4 @@ When you create a pull request, a preview of your changes is automatically deplo
 - **Layout**: Update the Jinja2 template structure
 - **Links**: Add/remove social links in `metadata.toml`
 - **Extras**: Add optional extras section for presentations and resources
-- **Avatar**: Replace with your own QR code using `avatar.py`
+- **Avatar**: Replace `assets/me.jpg` with your own photo and run `just avatar`

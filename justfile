@@ -39,6 +39,11 @@ snapshot: build
     @echo "📸 Capturing visual snapshot..."
     uv run src/snapshot.py
 
+# Render the 1200x630 OpenGraph card to assets/og.png
+og:
+    @echo "🖼️  Rendering OpenGraph card..."
+    uv run src/og.py
+
 # Clean generated files
 clean:
     @echo "🧹 Cleaning generated files..."

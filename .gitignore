@@ -172,3 +172,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# OG card temp render (written + deleted by src/og.py)
+assets/.og.html

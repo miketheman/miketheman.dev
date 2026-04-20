@@ -105,7 +105,7 @@ def main():
         generate_human_json(metadata)
 
         missing = []
-        for name in ("avatar.png", "avatar-plain.png"):
+        for name in ("avatar.png", "avatar-plain.png", "og.png"):
             try:
                 shutil.copy(f"assets/{name}", f"dist/{name}")
             except FileNotFoundError:
@@ -117,7 +117,7 @@ def main():
             missing.append("fonts/")
 
         if missing:
-            print(f"⚠️  Website generated, but missing: {', '.join(missing)}. Run `just avatar` / `just fonts` to regenerate.")
+            print(f"⚠️  Website generated, but missing: {', '.join(missing)}. Run `just avatar` / `just fonts` / `just og` to regenerate.")
         else:
             print("✅ Website generated successfully in dist/")
 

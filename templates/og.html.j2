@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="fonts.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1200px;
+    height: 630px;
+    background: #14130f;
+    color: #ece7d9;
+    overflow: hidden;
+  }
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 72px;
+    padding: 96px;
+    height: 100%;
+  }
+  .portrait {
+    width: 400px;
+    height: 400px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+  .name {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+  }
+  .role {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #ece7d9;
+  }
+  .url {
+    font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a2c087;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <img class="portrait" src="avatar-plain.png" alt="">
+    <div class="text">
+      <div class="name">{{ name }}</div>
+      <div class="role">{{ seo_title }}</div>
+      <div class="url">{{ site_url | replace("https://", "") | replace("http://", "") }}</div>
+    </div>
+  </div>
+</body>
+</html>

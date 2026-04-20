@@ -4,21 +4,22 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Primary Meta Tags -->
-        <title>{{ name }} - {{ title }}</title>
-        <meta name="title" content="{{ name }} - {{ title }}">
-        <meta name="description" content="{{ description }}">
+        <title>{{ name }} - {{ seo_title }}</title>
+        <meta name="title" content="{{ name }} - {{ seo_title }}">
+        <meta name="description" content="{{ seo_description }}">
+        <meta name="author" content="{{ name }}">
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ site_url }}">
-        <meta property="og:title" content="{{ name }} - {{ title }}">
-        <meta property="og:description" content="{{ description }}">
-        <meta property="og:image" content="{{ avatar }}">
+        <meta property="og:title" content="{{ name }} - {{ seo_title }}">
+        <meta property="og:description" content="{{ seo_description }}">
+        <meta property="og:image" content="{{ site_url }}/og.png">
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="{{ site_url }}">
-        <meta property="twitter:title" content="{{ name }} - {{ title }}">
-        <meta property="twitter:description" content="{{ description }}">
-        <meta property="twitter:image" content="{{ avatar }}">
+        <meta property="twitter:title" content="{{ name }} - {{ seo_title }}">
+        <meta property="twitter:description" content="{{ seo_description }}">
+        <meta property="twitter:image" content="{{ site_url }}/og.png">
         <meta property="twitter:creator" content="{{ twitter_handle }}">
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{{ avatar }}">

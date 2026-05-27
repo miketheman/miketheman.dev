@@ -116,6 +116,10 @@ def main():
         else:
             missing.append("fonts/")
 
+        # Downloadable files (PDFs, etc.) referenced by [[extras]] via url = "files/...".
+        if os.path.isdir("assets/files"):
+            shutil.copytree("assets/files", "dist/files", dirs_exist_ok=True)
+
         if missing:
             print(f"⚠️  Website generated, but missing: {', '.join(missing)}. Run `just avatar` / `just fonts` / `just og` to regenerate.")
         else:

@@ -45,6 +45,12 @@ url = "https://gist.github.com/miketheman/eb4e7214afd7372d5080d557f70a81bd"
 icon = "fa-solid fa-person-chalkboard"
 date = "2025-12-11"
 
+[[extras]]
+label = "Trusted Publishing - Eliminating credentials from your release workflow"
+url = "files/Trusted-Publishing.pdf"
+icon = "fa-solid fa-file-pdf"
+date = "2026-05-27"
+
 # human.json — https://codeberg.org/robida/human.json
 [human]
 url = "https://miketheman.dev"

@@ -2,17 +2,17 @@
 
 ## Repository Overview
 
-This is a modern, responsive personal website generator that creates a beautiful "link in bio" style page. The project uses Python with Jinja2 templating to generate a static website from TOML configuration, with automated deployment to GitHub Pages.
+This is a modern, responsive personal website generator that creates a beautiful "link in bio" style page. The project uses Python with minijinja (a Jinja2-compatible engine) templating to generate a static website from TOML configuration, with automated deployment to GitHub Pages.
 
 ## Technology Stack
 
 - **Python**: 3.13+ (minimum version required)
 - **Package Manager**: [uv](https://docs.astral.sh/uv/) - Fast Python package manager; deps declared in `pyproject.toml`, pinned in `uv.lock`
-- **Templating**: Jinja2 for HTML generation
+- **Templating**: minijinja (Jinja2-compatible) for HTML generation
 - **Task Runner**: [just](https://github.com/casey/just) (optional but recommended)
 - **Deployment**: GitHub Actions to GitHub Pages
 - **Key Libraries**:
-  - `jinja2` - Template rendering
+  - `minijinja` - Template rendering (Jinja2-compatible, autoescape on by extension)
   - `qrcode[pil]` - QR code generation with PIL support
 
 ## Project Structure
@@ -38,7 +38,7 @@ This is a modern, responsive personal website generator that creates a beautiful
 │   ├── fonts.css               # Rewritten @font-face CSS — inlined into <style>
 │   └── snapshots/              # PR visual-diff baselines — desktop + mobile PNGs
 ├── templates/
-│   └── index.html.j2           # Jinja2 template for the main page
+│   └── index.html.j2           # Jinja2-syntax template (rendered by minijinja)
 ├── dist/                       # Generated website output (not committed)
 ├── metadata.toml               # Site configuration and content
 ├── metadata.example.toml       # Example configuration
@@ -85,7 +85,7 @@ uv run src/snapshot.py   # requires Playwright chromium: uv run playwright insta
 ### Build Process
 
 1. `src/generate.py` reads `metadata.toml`
-2. Renders the Jinja2 template (`templates/index.html.j2`)
+2. Renders the template (`templates/index.html.j2`) via minijinja
 3. Outputs to `dist/index.html`
 4. Copies `assets/avatar.png` and `assets/avatar-plain.png` → `dist/` if present
 
@@ -160,7 +160,7 @@ CI runs `uv sync --frozen` against `uv.lock` for reproducible builds. Dependabot
 
 ### Current Dependencies
 
-- **generate.py**: `jinja2`
+- **generate.py**: `minijinja`
 - **avatar.py**: `qrcode[pil]` (includes PIL/Pillow)
 - **serve.py**: No external dependencies (uses stdlib only)
 - **snapshot.py**: `playwright` (dev-group only — not a runtime dep)

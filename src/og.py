@@ -9,7 +9,7 @@ after screenshotting.
 import tomllib
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
+from minijinja import Environment, load_from_path
 from playwright.sync_api import ViewportSize, sync_playwright
 
 ASSETS = Path("assets")
@@ -31,9 +31,9 @@ def guard_inputs():
 
 
 def render_template(metadata):
-    env = Environment(loader=FileSystemLoader("templates"))
-    template = env.get_template("og.html.j2")
-    return template.render(
+    env = Environment(loader=load_from_path("templates"))
+    return env.render_template(
+        "og.html.j2",
         name=metadata["name"],
         seo_title=metadata["seo_title"],
         site_url=metadata["site_url"],

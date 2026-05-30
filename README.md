@@ -9,7 +9,7 @@ A modern, responsive personal website generator that creates a beautiful "link i
 - **Dark Mode Support**: Automatically adapts to user's system preference
 - **Easy Configuration**: Simple TOML file for all content and links
 - **Extras Section**: Optional section for presentations, talks, and additional resources
-- **Fast Generation**: Uses Python with Jinja2 templating
+- **Fast Generation**: Uses Python with minijinja (Jinja2-compatible) templating
 - **GitHub Actions Deploy**: Automated deployment to GitHub Pages
 
 ## 🚀 Quick Start
@@ -114,7 +114,7 @@ Each extra item supports:
 │   ├── fonts/            # Self-hosted woff2 files — copied to dist/fonts/ at build
 │   ├── fonts.css         # Rewritten @font-face CSS — inlined into <style> at build
 │   └── snapshots/        # PR visual-diff baselines (desktop + mobile PNGs)
-├── templates/            # Jinja2 templates
+├── templates/            # Jinja2-syntax templates (rendered by minijinja)
 │   └── index.html.j2     # Main page template
 └── dist/                 # Generated website (gitignored)
     ├── index.html
@@ -137,7 +137,7 @@ The preview workflow also regenerates `assets/snapshots/*.png` via Playwright (d
 ## 🎨 Customization
 
 - **Styling**: Modify the CSS in `templates/index.html.j2`
-- **Layout**: Update the Jinja2 template structure
+- **Layout**: Update the template structure in `templates/index.html.j2`
 - **Links**: Add/remove social links in `metadata.toml`
 - **Extras**: Add optional extras section for presentations and resources
 - **Avatar**: Replace `assets/me.jpg` with your own photo and run `just avatar`

@@ -7,7 +7,7 @@ import tomllib
 
 HUMAN_JSON_VERSION = "0.1.1"
 
-from jinja2 import Environment, FileSystemLoader
+from minijinja import Environment, load_from_path
 
 from icons import ICON_CACHE, parse_icon
 
@@ -46,9 +46,8 @@ def read_fonts_css():
 
 
 def generate_html(metadata):
-    env = Environment(loader=FileSystemLoader("templates"))
-    env.globals["icon_svg"] = icon_svg
-    template = env.get_template("index.html.j2")
+    env = Environment(loader=load_from_path("templates"))
+    env.add_function("icon_svg", icon_svg)
 
     visible_extras = []
     expandable_extras = []
@@ -84,7 +83,7 @@ def generate_html(metadata):
         "fonts_css": read_fonts_css(),
     }
 
-    html = template.render(**context)
+    html = env.render_template("index.html.j2", **context)
     with open("dist/index.html", "w") as f:
         f.write(html)
 

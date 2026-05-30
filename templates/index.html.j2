@@ -10,19 +10,19 @@
         <meta name="author" content="{{ name }}">
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ site_url }}">
+        <meta property="og:url" content="{{ site_url | safe }}">
         <meta property="og:title" content="{{ name }} - {{ seo_title }}">
         <meta property="og:description" content="{{ seo_description }}">
-        <meta property="og:image" content="{{ site_url }}/og.png">
+        <meta property="og:image" content="{{ site_url | safe }}/og.png">
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="{{ site_url }}">
+        <meta property="twitter:url" content="{{ site_url | safe }}">
         <meta property="twitter:title" content="{{ name }} - {{ seo_title }}">
         <meta property="twitter:description" content="{{ seo_description }}">
-        <meta property="twitter:image" content="{{ site_url }}/og.png">
+        <meta property="twitter:image" content="{{ site_url | safe }}/og.png">
         <meta property="twitter:creator" content="{{ twitter_handle }}">
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ avatar }}">
+        <link rel="icon" type="image/png" href="{{ avatar | safe }}">
         <!-- Preload the LCP avatar — picture source's media query decides which to fetch -->
         <link rel="preload" as="image" href="avatar.png" media="not all and (min-width: 640px) and (hover: hover) and (pointer: fine)">
         <link rel="preload" as="image" href="avatar-plain.png" media="(min-width: 640px) and (hover: hover) and (pointer: fine)">
@@ -368,7 +368,7 @@
                 <p class="description">{{ description }}</p>
                 <div class="links">
                     {% for link in links %}
-                        <a href="{{ link.url }}"
+                        <a href="{{ link.url | safe }}"
                            class="link-item"
                            rel="noopener noreferrer"
                            target="_blank">
@@ -392,7 +392,7 @@
                     <div class="extras-heading">Extras</div>
                     <div class="extras-links">
                         {% for extra in visible_extras %}
-                            <a href="{{ extra.url }}"
+                            <a href="{{ extra.url | safe }}"
                                class="link-item"
                                rel="noopener noreferrer"
                                target="_blank">
@@ -408,7 +408,7 @@
                             <summary class="extras-summary">Show more ({{ expandable_extras|length }})</summary>
                             <div class="extras-expandable">
                                 {% for extra in expandable_extras %}
-                                    <a href="{{ extra.url }}"
+                                    <a href="{{ extra.url | safe }}"
                                        class="link-item"
                                        rel="noopener noreferrer"
                                        target="_blank">

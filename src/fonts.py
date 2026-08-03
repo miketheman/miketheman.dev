@@ -7,6 +7,7 @@ generate.py, eliminating the render-blocking external CSS request.
 """
 import pathlib
 import re
+import urllib.parse
 import urllib.request
 
 FONTS_URL = (
@@ -55,8 +56,14 @@ def main():
     )
     # Nothing may point at Google once rewritten: a leftover absolute URL means a
     # format we didn't localize, and the page would fetch fonts at runtime.
-    if "fonts.gstatic.com" in local_css:
-        leftover = set(re.findall(r"url\((https://fonts\.gstatic\.com/[^)]+)\)", local_css))
+    css_urls = re.findall(r"url\(([^)]+)\)", local_css)
+    leftover = {
+        u
+        for raw in css_urls
+        for u in [raw.strip(" \"'")]
+        if urllib.parse.urlparse(u).hostname == "fonts.gstatic.com"
+    }
+    if leftover:
         raise SystemExit(
             "❌ un-localized font URLs remain — the page would fetch these at runtime:\n"
             + "\n".join(f"   {u}" for u in sorted(leftover))

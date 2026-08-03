@@ -11,6 +11,8 @@ AVATAR_FILE_PATH = pathlib.Path("assets/me.jpg")
 QR_OUTPUT_PATH = pathlib.Path("assets/avatar.png")
 PLAIN_OUTPUT_PATH = pathlib.Path("assets/avatar-plain.png")
 PLAIN_OUTPUT_SIZE = (512, 512)
+FAVICON_OUTPUT_PATH = pathlib.Path("assets/favicon.png")
+FAVICON_OUTPUT_SIZE = (32, 32)
 
 
 def create_circular_avatar(avatar_path, size=(1024, 1024)):
@@ -26,6 +28,7 @@ def create_circular_avatar(avatar_path, size=(1024, 1024)):
 
 circular_avatar = create_circular_avatar(AVATAR_FILE_PATH)
 circular_avatar.resize(PLAIN_OUTPUT_SIZE, Image.LANCZOS).save(PLAIN_OUTPUT_PATH)
+circular_avatar.resize(FAVICON_OUTPUT_SIZE, Image.LANCZOS).save(FAVICON_OUTPUT_PATH)
 
 # box_size=25 renders each module at 25 px so the natural canvas lands around
 # 1024 px — no post-render downscaling, so the embedded photo keeps detail.

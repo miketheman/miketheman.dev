@@ -105,7 +105,7 @@ def main():
         generate_human_json(metadata)
 
         missing = []
-        for name in ("avatar.png", "avatar-plain.png", "og.png"):
+        for name in ("avatar.png", "avatar-plain.png", "favicon.png", "og.png"):
             try:
                 shutil.copy(f"assets/{name}", f"dist/{name}")
             except FileNotFoundError:

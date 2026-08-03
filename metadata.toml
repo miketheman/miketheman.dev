@@ -4,7 +4,6 @@ title = "Code Gardener"
 description = "Building better software, one commit at a time. Open source contributor and Python enthusiast."
 seo_title = "PyPI Maintainer, Pythonista, Fun Uncle & Code Gardener"
 seo_description = "Building better software, one commit at a time. PyPI maintainer and open source contributor focused on Python packaging and developer experience."
-avatar = "https://miketheman.dev/avatar.png"
 site_url = "https://miketheman.dev"
 
 # Note: The order of the sections determines the output order.

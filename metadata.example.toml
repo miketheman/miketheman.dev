@@ -5,7 +5,6 @@
 name = "Your Name"
 title = "Your Professional Title"
 description = "A brief description about yourself and what you do."
-avatar = "https://yoursite.com/avatar.png"
 site_url = "https://yoursite.com"
 twitter_handle = "@yourusername"
 

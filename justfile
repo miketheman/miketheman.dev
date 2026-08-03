@@ -47,7 +47,7 @@ og:
 # Clean generated files
 clean:
     @echo "🧹 Cleaning generated files..."
-    rm -f dist/index.html dist/avatar*.png
+    rm -rf dist/*
     @echo "✅ Cleaned"
 
 # Show available recipes

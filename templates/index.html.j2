@@ -49,14 +49,16 @@
         --c-qr-bg: #ffffff;
 
         /* Type — editorial serif + humanist grotesque + mono */
-        --font-display: "Fraunces", ui-serif, Georgia, serif;
+        --font-display: "Petrona", ui-serif, Georgia, serif;
         --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
 
         --text-xs:   clamp(0.75rem,  0.73rem + 0.10vw, 0.8125rem);
         --text-sm:   clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
         --text-base: clamp(1rem,     0.96rem + 0.20vw, 1.0625rem);
         --text-xl:   clamp(1.5rem,   1.38rem + 0.60vw, 1.75rem);
-        --text-2xl:  clamp(2rem,     1.70rem + 1.50vw, 2.75rem);
+        /* ~4% over the other steps: Petrona's x-height runs smaller than the
+           body face, so the name needs the bump to hold the same presence. */
+        --text-2xl:  clamp(2.0625rem, 1.77rem + 1.56vw, 2.875rem);
 
         --leading-tight: 1.1;
         --leading-body:  1.55;
@@ -193,7 +195,6 @@
         font-family: var(--font-display);
         font-size: var(--text-2xl);
         font-weight: 400;
-        font-variation-settings: "opsz" 120, "SOFT" 30;
         line-height: var(--leading-tight);
         letter-spacing: var(--tracking-tight);
         text-align: center;
@@ -306,6 +307,16 @@
         gap: var(--space-1);
       }
 
+      /* Dated rows wrap to 2–3 lines, so centering strands the icon beside the
+         middle of the block. Pin it to the first line it labels instead. */
+      .link-item:has(.extra-link-content) {
+        align-items: flex-start;
+      }
+
+      .link-item:has(.extra-link-content) svg {
+        margin-top: calc((1em * var(--leading-body) - 1.4em) / 2);
+      }
+
       .extra-link-date {
         font-size: var(--text-xs);
         font-variant-numeric: tabular-nums;
@@ -334,6 +345,13 @@
       }
 
       .extras-summary::-webkit-details-marker { display: none; }
+
+      /* The label has to answer the state it's in — "Show more" while the rows
+         are already open reads as a broken control. */
+      .extras-summary-less,
+      .extras-details[open] .extras-summary-more { display: none; }
+
+      .extras-details[open] .extras-summary-less { display: inline; }
 
       .extras-summary:hover,
       .extras-summary:focus-visible {
@@ -389,7 +407,7 @@
                             </g>
                         </svg>
                     </div>
-                    <div class="extras-heading">Extras</div>
+                    <h2 class="extras-heading">Extras</h2>
                     <div class="extras-links">
                         {% for extra in visible_extras %}
                             <a href="{{ extra.url | safe }}"
@@ -405,7 +423,10 @@
                         {% endfor %}
                         {% if expandable_extras %}
                         <details class="extras-details">
-                            <summary class="extras-summary">Show more ({{ expandable_extras|length }})</summary>
+                            <summary class="extras-summary">
+                                <span class="extras-summary-more">Show more ({{ expandable_extras|length }})</span>
+                                <span class="extras-summary-less">Show less</span>
+                            </summary>
                             <div class="extras-expandable">
                                 {% for extra in expandable_extras %}
                                     <a href="{{ extra.url | safe }}"

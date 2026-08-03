@@ -79,7 +79,8 @@ def generate_html(metadata):
 
     context = {
         **metadata,
-        "updated_date": datetime.datetime.now().strftime("%B %d, %Y"),
+        # %d zero-pads ("August 02"); build the day without it.
+        "updated_date": "{0:%B} {0.day}, {0:%Y}".format(datetime.datetime.now()),
         "fonts_css": read_fonts_css(),
     }
 

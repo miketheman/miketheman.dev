@@ -1,0 +1,352 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-02T19:35:00-04:00",
+  "title": "Design System: miketheman.dev",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#f4f1ea",
+        "tonalRamp": [
+          "oklch(15% 0.008 85)",
+          "oklch(26% 0.010 85)",
+          "oklch(38% 0.012 85)",
+          "oklch(50% 0.014 85)",
+          "oklch(62% 0.016 85)",
+          "oklch(74% 0.016 85)",
+          "oklch(86% 0.014 85)",
+          "oklch(96% 0.010 85)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Ink",
+        "canonical": "#1c1a17",
+        "tonalRamp": [
+          "oklch(15% 0.006 75)",
+          "oklch(19% 0.006 75)",
+          "oklch(30% 0.007 75)",
+          "oklch(42% 0.008 75)",
+          "oklch(55% 0.008 75)",
+          "oklch(68% 0.008 75)",
+          "oklch(82% 0.007 75)",
+          "oklch(95% 0.005 75)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#5a554d"
+      },
+      "ink-subtle": {
+        "role": "neutral",
+        "displayName": "Subtle Ink",
+        "canonical": "#6b6559"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#d8d2c4",
+        "tonalRamp": [
+          "oklch(15% 0.012 85)",
+          "oklch(27% 0.015 85)",
+          "oklch(39% 0.017 85)",
+          "oklch(51% 0.019 85)",
+          "oklch(63% 0.020 85)",
+          "oklch(75% 0.019 85)",
+          "oklch(86% 0.018 85)",
+          "oklch(95% 0.012 85)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Hover Wash",
+        "canonical": "#ebe4d4"
+      },
+      "pressed-fern": {
+        "role": "primary",
+        "displayName": "Pressed Fern",
+        "canonical": "#3f5a3a",
+        "tonalRamp": [
+          "oklch(15% 0.030 141)",
+          "oklch(26% 0.042 141)",
+          "oklch(37% 0.050 141)",
+          "oklch(48% 0.056 141)",
+          "oklch(59% 0.060 141)",
+          "oklch(70% 0.052 141)",
+          "oklch(83% 0.038 141)",
+          "oklch(95% 0.018 141)"
+        ]
+      },
+      "qr-white": {
+        "role": "neutral",
+        "displayName": "QR White",
+        "canonical": "#ffffff"
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Soil Black",
+        "canonical": "#14130f",
+        "tonalRamp": [
+          "oklch(12% 0.008 95)",
+          "oklch(15% 0.008 95)",
+          "oklch(27% 0.010 95)",
+          "oklch(39% 0.012 95)",
+          "oklch(52% 0.013 95)",
+          "oklch(66% 0.013 95)",
+          "oklch(80% 0.011 95)",
+          "oklch(94% 0.008 95)"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "canonical": "#ece7d9"
+      },
+      "night-ink-muted": {
+        "role": "neutral",
+        "displayName": "Weathered Bone",
+        "canonical": "#a6a094"
+      },
+      "night-ink-subtle": {
+        "role": "neutral",
+        "displayName": "Faded Bone",
+        "canonical": "#90897d"
+      },
+      "night-rule": {
+        "role": "neutral",
+        "displayName": "Night Rule",
+        "canonical": "#2d2b26"
+      },
+      "night-surface-hover": {
+        "role": "neutral",
+        "displayName": "Night Wash",
+        "canonical": "#1e1c17"
+      },
+      "new-growth": {
+        "role": "primary",
+        "displayName": "New Growth",
+        "canonical": "#a2c087",
+        "tonalRamp": [
+          "oklch(16% 0.032 130)",
+          "oklch(28% 0.045 130)",
+          "oklch(40% 0.055 130)",
+          "oklch(52% 0.062 130)",
+          "oklch(64% 0.068 130)",
+          "oklch(78% 0.065 130)",
+          "oklch(88% 0.045 130)",
+          "oklch(96% 0.020 130)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name, and nothing else. The only Petrona on the page. Carries a ~4% size premium over the rest of the scale because Petrona's x-height runs smaller than the body face."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The role line: uppercase, tracked 0.14em, centered between two short green rules."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Description copy (capped at 30rem) and every link label."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section headings and the expander summary. Uppercase, tracked 0.14em, muted ink."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Dates and the footer stamp. Tabular numerals so stacked dates align down the column."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "purpose": "The only easing curve in the system. Fast out, settled landing."
+      },
+      {
+        "name": "dur",
+        "value": "180ms",
+        "purpose": "The only duration. Zeroed to 0ms at the token level under prefers-reduced-motion, so no component needs its own media query."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "600px",
+        "purpose": "Max-width query: the QR mat narrows from 512px to 320px."
+      },
+      {
+        "name": "pointer-fine",
+        "value": "(min-width: 640px) and (hover: hover) and (pointer: fine)",
+        "purpose": "Capability query, not a size query. Pointer devices get the circular portrait; anything touch-capable keeps the scannable QR."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Link Row",
+      "kind": "nav",
+      "refersTo": "link-row",
+      "description": "The workhorse: a hairline-bordered specimen label holding an inlined Font Awesome SVG and a text label. The icon is the only thing that greens on hover.",
+      "html": "<a class=\"ds-link-row\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M288 227.1C261.9 176.4 190.9 81.9 124.9 35.3 61.6-9.4 37.5-1.7 21.6 5.5 3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7 3.3-.5 6.6-.9 10-1.4-3.3 .5-6.6 1-10 1.4-93.9 14-177.3 48.2-67.9 169.9 120.3 124.6 164.8-26.7 187.7-103.4 22.9 76.7 49.2 222.5 185.6 103.4 102.4-103.4 28.1-156-65.8-169.9-3.3-.4-6.7-.8-10-1.3 3.4 .4 6.7 .9 10 1.3 64.1 7.1 133.6-15.1 153.2-80.7 5.9-19.9 15-138.9 15-155.5s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8-66.1 46.6-137.1 141.1-163.2 191.8z\"/></svg><span>Bluesky</span></a>",
+      "css": ".ds-link-row { display: flex; align-items: center; gap: 1rem; min-height: 44px; padding: 1rem 1.5rem; border: 1px solid #d8d2c4; border-radius: 2px; text-decoration: none; color: #1c1a17; background: transparent; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; line-height: 1.55; transition: background-color 180ms cubic-bezier(0.2,0.8,0.2,1), border-color 180ms cubic-bezier(0.2,0.8,0.2,1), transform 180ms cubic-bezier(0.2,0.8,0.2,1); } .ds-link-row svg { width: 1.4em; height: 1.4em; flex-shrink: 0; color: #5a554d; transition: color 180ms cubic-bezier(0.2,0.8,0.2,1); } .ds-link-row:hover, .ds-link-row:focus-visible { background: #ebe4d4; border-color: #5a554d; } .ds-link-row:hover svg, .ds-link-row:focus-visible svg { color: #3f5a3a; } .ds-link-row:active { transform: translateY(1px); } .ds-link-row:focus-visible { outline: 2px solid #3f5a3a; outline-offset: 3px; }"
+    },
+    {
+      "name": "Extras Row",
+      "kind": "nav",
+      "refersTo": "link-row",
+      "description": "The Link Row's dated variant, used for talks, decks, and companion artifacts. Label and tabular-numeral date stack in a 0.25rem column beside the icon, and the icon pins to the first line of the label rather than centering against the whole block.",
+      "html": "<a class=\"ds-extra-row\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M192 80a56 56 0 1 0 0-112 56 56 0 1 0 0 112zM176 512l0-160c0-8.8 7.2-16 16-16s16 7.2 16 16l0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-336 128 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-16 0 0-48 192 0 0 192-192 0 0-32-64 0 0 48c0 26.5 21.5 48 48 48l224 0c26.5 0 48-21.5 48-48l0-224c0-26.5-21.5-48-48-48L368 0c-26.5 0-48 21.5-48 48l0 64-122.7 0c-45.6 0-88.5 21.6-115.6 58.2L14.3 260.9c-10.5 14.2-7.6 34.2 6.6 44.8s34.2 7.6 44.8-6.6L112 236.7 112 512c0 17.7 14.3 32 32 32s32-14.3 32-32z\"/></svg><span class=\"ds-extra-content\"><span>DevOpsDays Tel Aviv 2025 \u2014 Moving Mountains</span><span class=\"ds-date-stamp\">2025-12-11</span></span></a>",
+      "css": ".ds-extra-row { display: flex; align-items: flex-start; gap: 1rem; min-height: 44px; padding: 1rem 1.5rem; border: 1px solid #d8d2c4; border-radius: 2px; text-decoration: none; color: #1c1a17; background: transparent; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; line-height: 1.55; transition: background-color 180ms cubic-bezier(0.2,0.8,0.2,1), border-color 180ms cubic-bezier(0.2,0.8,0.2,1), transform 180ms cubic-bezier(0.2,0.8,0.2,1); } .ds-extra-row svg { width: 1.4em; height: 1.4em; flex-shrink: 0; margin-top: calc((1em * 1.55 - 1.4em) / 2); color: #5a554d; transition: color 180ms cubic-bezier(0.2,0.8,0.2,1); } .ds-extra-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.25rem; } .ds-extra-content .ds-date-stamp { font-size: 0.8125rem; font-variant-numeric: tabular-nums; letter-spacing: 0.06em; color: #6b6559; } .ds-extra-row:hover, .ds-extra-row:focus-visible { background: #ebe4d4; border-color: #5a554d; } .ds-extra-row:hover svg, .ds-extra-row:focus-visible svg { color: #3f5a3a; } .ds-extra-row:active { transform: translateY(1px); } .ds-extra-row:focus-visible { outline: 2px solid #3f5a3a; outline-offset: 3px; }"
+    },
+    {
+      "name": "Expander Summary",
+      "kind": "button",
+      "refersTo": "expander-summary",
+      "description": "A native <details>/<summary> with its marker removed. Borrows the row's border and hover wash but takes the tracked-caps Label voice, so it reads as an instruction to the sheet rather than an entry on it. The label swaps to \"Show less\" when open, in CSS off the [open] attribute.",
+      "html": "<details class=\"ds-expander\"><summary class=\"ds-expander-summary\"><span class=\"ds-expander-more\">Show more (3)</span><span class=\"ds-expander-less\">Show less</span></summary><div class=\"ds-expander-body\">Additional specimens mount here.</div></details>",
+      "css": ".ds-expander { width: 100%; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; } .ds-expander-summary { list-style: none; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid #d8d2c4; border-radius: 2px; cursor: pointer; text-align: center; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #5a554d; transition: background-color 180ms cubic-bezier(0.2,0.8,0.2,1), border-color 180ms cubic-bezier(0.2,0.8,0.2,1); } .ds-expander-summary::-webkit-details-marker { display: none; } .ds-expander-less, .ds-expander[open] .ds-expander-more { display: none; } .ds-expander[open] .ds-expander-less { display: inline; } .ds-expander-summary:hover, .ds-expander-summary:focus-visible { background: #ebe4d4; border-color: #5a554d; } .ds-expander-summary:focus-visible { outline: 2px solid #3f5a3a; outline-offset: 3px; } .ds-expander-body { margin-top: 0.75rem; font-size: 1rem; line-height: 1.55; color: #5a554d; }"
+    },
+    {
+      "name": "Avatar Mat",
+      "kind": "custom",
+      "refersTo": "avatar-mat",
+      "description": "Signature. The QR code mounted on a pure-white ground with a double frame: outer 1px border plus a second hairline inset 0.5rem via ::before. Pinned light in both themes for scan reliability. The checkered field here stands in for the generated QR image.",
+      "html": "<div class=\"ds-avatar-mat\"><div class=\"ds-avatar-code\" role=\"img\" aria-label=\"QR code\"></div></div>",
+      "css": ".ds-avatar-mat { position: relative; width: 100%; max-width: 320px; background: #ffffff; padding: 1.5rem; border: 1px solid #d8d2c4; } .ds-avatar-mat::before { content: \"\"; position: absolute; inset: 0.5rem; border: 1px solid #d8d2c4; pointer-events: none; } .ds-avatar-code { position: relative; aspect-ratio: 1; background-color: #ffffff; background-image: repeating-conic-gradient(#000 0% 25%, #ffffff 0% 50%); background-size: 16px 16px; }"
+    },
+    {
+      "name": "Portrait Avatar",
+      "kind": "custom",
+      "refersTo": "avatar-portrait",
+      "description": "The same element on pointer-fine devices: the mat dissolves (transparent, zero padding) and the border becomes a ring hugging a circular portrait.",
+      "html": "<div class=\"ds-avatar-portrait\" role=\"img\" aria-label=\"Portrait\"></div>",
+      "css": ".ds-avatar-portrait { width: 100%; max-width: 240px; aspect-ratio: 1; border-radius: 50%; border: 1px solid #d8d2c4; background: radial-gradient(circle at 50% 38%, #ebe4d4 0 28%, #d8d2c4 28% 100%); }"
+    },
+    {
+      "name": "Role Line",
+      "kind": "custom",
+      "refersTo": "section-heading",
+      "description": "Signature. Tracked-caps role held between two 1.5rem accent rules drawn with ::before and ::after \u2014 the only place a rule and the accent color meet.",
+      "html": "<p class=\"ds-role-line\">Code Gardener</p>",
+      "css": ".ds-role-line { margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.75rem; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 0.9375rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #5a554d; } .ds-role-line::before, .ds-role-line::after { content: \"\"; flex-shrink: 0; width: 1.5rem; height: 1px; background: #3f5a3a; }"
+    },
+    {
+      "name": "Botanical Ornament",
+      "kind": "custom",
+      "refersTo": "section-heading",
+      "description": "Signature. A hand-plotted leaf between two rules, replacing the divider above a section. The system's single decorative flourish, and load-bearing \u2014 it is what makes the page feel drawn.",
+      "html": "<div class=\"ds-ornament\"><svg aria-hidden=\"true\" width=\"120\" height=\"16\" viewBox=\"0 0 120 16\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1\"><line x1=\"0\" y1=\"8\" x2=\"48\" y2=\"8\"/><path d=\"M 52 8 Q 60 1 68 8 Q 60 15 52 8 Z\"/><path d=\"M 53 8 Q 57 5 65 6\" stroke-width=\"0.6\"/><line x1=\"72\" y1=\"8\" x2=\"120\" y2=\"8\"/></g></svg><div class=\"ds-ornament-heading\">Extras</div></div>",
+      "css": ".ds-ornament { display: flex; flex-direction: column; align-items: center; color: #3f5a3a; } .ds-ornament svg { display: block; margin-bottom: 1.5rem; } .ds-ornament-heading { font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #5a554d; }"
+    },
+    {
+      "name": "Date Stamp",
+      "kind": "custom",
+      "refersTo": "date-stamp",
+      "description": "The quietest tier: tabular numerals at 0.06em tracking, used for extra dates and the footer's Updated stamp so stacked dates align down the column.",
+      "html": "<div class=\"ds-footer-stamp\">Updated 2026-08-02</div>",
+      "css": ".ds-footer-stamp { text-align: center; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-variant-numeric: tabular-nums; letter-spacing: 0.06em; color: #6b6559; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Herbarium Sheet",
+    "overview": "The page is a specimen mounted on warm paper. The QR avatar sits inside a double-ruled mat \u2014 an outer border and an inner hairline inset 8px from it \u2014 the way a pressed leaf is framed and labeled on an archival sheet. Below it the name is set once in a serif with its optical-size axis pushed wide open, the role is a tracked-out caps line held between two short green rules, and every link is a hairline-bordered entry mounted in the same column. Where a lesser page would put a <hr>, this one draws a leaf.\n\nThe register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face rides a SOFT variation axis that rounds its terminals; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.\n\nDensity is generous and vertical. One column, 36rem wide, centered in the viewport, stacked at a 1.5rem rhythm \u2014 the page is meant to be read in a hallway on a phone, seconds after someone scanned the code that is now looking back at them from the screen. It explicitly rejects the bio-link SaaS look (pill buttons, gradient hero, candy cards), the dev-portfolio dark-neon look (terminal green on black, mono everything, glow), and the generic SaaS landing look (rounded-xl cards, blue-500, soft drop shadows, Inter).",
+    "keyCharacteristics": [
+      "Warm paper and ink, never white-and-gray",
+      "One green, used sparingly, as the only chroma",
+      "Hairline rules do all structural work; zero shadows",
+      "Near-square 2px corners \u2014 the desktop portrait is the only circle",
+      "Serif display voice used exactly once; everything else humanist grotesque",
+      "Uppercase, widely tracked labels for anything secondary",
+      "A drawn botanical ornament in place of a divider"
+    ],
+    "rules": [
+      {
+        "name": "The One Green Rule",
+        "body": "Pressed Fern gets four jobs: the rules flanking the role, the ornament, icons on hover/focus, and the focus ring. It is never a fill, never a border color, never body text, never a link color at rest. Its rarity is what makes the page feel tended rather than branded.",
+        "section": "colors"
+      },
+      {
+        "name": "The Un-themed QR Rule",
+        "body": "The QR mat and code stay pure black on pure white in every theme. A phone camera in bad venue lighting outranks palette coherence. Do not add prefers-color-scheme overrides for QR White.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Neutral Rule",
+        "body": "No neutral on this page is achromatic. Every gray carries the paper's yellow-warm cast. Dropping a #888 or a #f5f5f5 into this system reads instantly as foreign.",
+        "section": "colors"
+      },
+      {
+        "name": "The Single Serif Rule",
+        "body": "Petrona appears exactly once per page, on the name. The moment a second element takes the serif, the name stops being the anchor. The OG card is the one sanctioned exception: it sets both name and role in Petrona, because a 1200x630 card has no hairline system to carry hierarchy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tracked-Caps Rule",
+        "body": "Anything secondary \u2014 role, section heading, expander \u2014 is uppercase at 0.14em. Never letterspace lowercase text, and never set body copy in caps.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two-Weight Rule",
+        "body": "400 and 500 are the entire weight vocabulary. Emphasis comes from size, case, tracking, and color tier \u2014 never from a heavier cut.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Date Rule",
+        "body": "Every date on the page is font-variant-numeric: tabular-nums at 0.06em, so a stacked list of dates aligns down the column.",
+        "section": "typography"
+      },
+      {
+        "name": "The Capability-Not-Width Rule",
+        "body": "The avatar switch is decided by hover and pointer, not by viewport alone. A phone held in landscape at 800px is still a phone, and it still gets the QR.",
+        "section": "layout"
+      },
+      {
+        "name": "The Drawn-Not-Lit Rule",
+        "body": "Flat is the default and shadows are a smell. If a future element genuinely needs to float above the sheet \u2014 a dialog, a lifted card \u2014 it may earn one, but it must be argued for, not reached for. Ambient shadows on resting surfaces are always wrong here.",
+        "section": "elevation"
+      },
+      {
+        "name": "The 2px Rule",
+        "body": "2px or 50%. Nothing in between \u2014 no 4px, no 8px, no rounded-xl.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Greening Icon Rule",
+        "body": "The icon is the only thing that changes color on hover. It is the system's smallest, most-repeated moment of life; do not add a color change to the label too.",
+        "section": "components"
+      },
+      {
+        "name": "The Answering Label Rule",
+        "body": "A control's label states what the control will do next, never what it did. A toggle still reading \"Show more\" while its rows are open is a broken control, not a styling detail.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do keep Pressed Fern to its four jobs \u2014 flanking rules, ornament, icon hover, focus ring. New accents belong nowhere.",
+      "Do build depth with 1px rules in the rule color, and let :active translateY(1px) carry the tactility.",
+      "Do compose any new section the same way the Extras section is composed: ornament, tracked-caps heading, then specimen rows.",
+      "Do set every date with tabular-nums and 0.06em tracking so columns of dates align.",
+      "Do honor the 44px minimum hit height on anything interactive \u2014 this page is used on phones, one-handed, standing up.",
+      "Do route all motion through --dur / --ease, which prefers-reduced-motion already zeroes at the token level.",
+      "Do self-host any new font or icon and inline it at build time; nothing on this page fetches from a third party at load.",
+      "Do keep the QR mat pure black-on-white in every theme."
+    ],
+    "donts": [
+      "Don't add a box-shadow to a resting surface. Flat is the default; a floating element must justify itself.",
+      "Don't introduce a radius other than 2px or 50%.",
+      "Don't set a second element on the page in Petrona, or add a weight beyond 400 and 500.",
+      "Don't use an achromatic gray \u2014 every neutral here is warm.",
+      "Don't letterspace lowercase text, or set body copy in uppercase.",
+      "Don't drift toward the three rejected worlds: bio-link SaaS (pill buttons, gradients, candy cards), dev-portfolio dark neon (mono everything, glow, terminal green), or generic SaaS landing (rounded-xl, blue-500, Inter, drop shadows).",
+      "Don't widen the column past 36rem or run description copy past 30rem.",
+      "Don't swap the QR avatar out of the anchor position \u2014 it is the page's identity device and it circulates offline."
+    ]
+  }
+}

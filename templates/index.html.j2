@@ -193,7 +193,8 @@
         font-family: var(--font-display);
         font-size: var(--text-2xl);
         font-weight: 400;
-        font-variation-settings: "opsz" 120, "SOFT" 30;
+        /* Only "opsz" is available — src/fonts.py requests an opsz-only axis subset. */
+        font-variation-settings: "opsz" 120;
         line-height: var(--leading-tight);
         letter-spacing: var(--tracking-tight);
         text-align: center;
@@ -389,7 +390,7 @@
                             </g>
                         </svg>
                     </div>
-                    <div class="extras-heading">Extras</div>
+                    <h2 class="extras-heading">Extras</h2>
                     <div class="extras-links">
                         {% for extra in visible_extras %}
                             <a href="{{ extra.url | safe }}"

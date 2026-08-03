@@ -33,7 +33,7 @@ Then:
 # Using Just (recommended)
 just build          # Generate the website
 just serve          # Build and start development server
-just avatar         # Regenerate avatar.png (QR) and avatar-plain.png (portrait)
+just avatar         # Regenerate avatar.png (QR), avatar-plain.png (portrait), favicon.png
 just icons          # Fetch Font Awesome SVGs referenced in metadata.toml
 just fonts          # Download + self-host Google Fonts into assets/fonts/
 just lint           # Build, then run biome against dist/index.html (HTML/CSS/a11y lint)
@@ -43,7 +43,7 @@ just clean          # Clean generated files
 # Or run scripts directly (from repo root)
 uv run src/generate.py  # Generate the website
 uv run src/serve.py     # Start development server
-uv run src/avatar.py    # Generate avatars from assets/me.jpg
+uv run src/avatar.py    # Generate avatars + favicon from assets/me.jpg
 uv run src/icons.py     # Download Font Awesome SVGs for metadata.toml icons
 uv run src/fonts.py     # Download Google Fonts woff2 + rewrite CSS to self-host
 uv run src/snapshot.py  # Capture visual-diff snapshots (requires Playwright chromium)
@@ -58,7 +58,6 @@ Edit `metadata.toml` to customize your profile:
 ```toml
 name = "Your Name"
 title = "Your Title"
-avatar = "https://yoursite.com/avatar.png"
 
 [[links]]
 url = "https://github.com/yourusername"
@@ -110,6 +109,7 @@ Each extra item supports:
 │   ├── me.jpg            # Source photo for avatar
 │   ├── avatar.png        # QR with embedded portrait (mobile view)
 │   ├── avatar-plain.png  # Plain circular portrait (desktop view)
+│   ├── favicon.png       # 32x32 tab icon (portrait crop)
 │   ├── icons/            # Font Awesome SVGs (brands/ + solid/) — inlined at build time
 │   ├── fonts/            # Self-hosted woff2 files — copied to dist/fonts/ at build
 │   ├── fonts.css         # Rewritten @font-face CSS — inlined into <style> at build
@@ -119,7 +119,8 @@ Each extra item supports:
 └── dist/                 # Generated website (gitignored)
     ├── index.html
     ├── avatar.png
-    └── avatar-plain.png
+    ├── avatar-plain.png
+    └── favicon.png
 ```
 
 ## 🚀 Deploy

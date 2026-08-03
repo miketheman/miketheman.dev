@@ -56,7 +56,7 @@ Not a résumé, not a blog, not a hosted link-in-bio service. It is a self-owned
 
 ## Evidence on Hand
 
-- Real assets, all committed: `assets/me.jpg` (source photo), `assets/avatar.png` (QR), `assets/avatar-plain.png` (portrait), `assets/og.png`, `assets/icons/**`, `assets/fonts/**`, `assets/snapshots/*.png`.
+- Real assets, all committed: `assets/me.jpg` (source photo), `assets/avatar.png` (QR), `assets/avatar-plain.png` (portrait), `assets/favicon.png` (tab icon), `assets/og.png`, `assets/icons/**`, `assets/fonts/**`, `assets/snapshots/*.png`.
 - Real content: six profile links, dated extras including a DevOpsDays Tel Aviv 2025 talk companion gist and a "Trusted Publishing" PDF deck (`assets/files/Trusted-Publishing.pdf`).
 - Real identity proofs: `rel="me"` to hachyderm.io, `human.json` with a dated vouch from sethmlarson.dev.
 - **Not on hand — do not fabricate:** testimonials, client or employer logos, metrics, download counts, awards, pricing, availability-for-hire claims, or a contact email. No email address is currently published anywhere on the page.

@@ -22,10 +22,10 @@
         <meta property="twitter:image" content="{{ site_url | safe }}/og.png">
         <meta property="twitter:creator" content="{{ twitter_handle }}">
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ avatar | safe }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
         <!-- Preload the LCP avatar — picture source's media query decides which to fetch -->
-        <link rel="preload" as="image" href="avatar.png" media="not all and (min-width: 640px) and (hover: hover) and (pointer: fine)">
-        <link rel="preload" as="image" href="avatar-plain.png" media="(min-width: 640px) and (hover: hover) and (pointer: fine)">
+        <link rel="preload" as="image" href="avatar.png" fetchpriority="high" media="not all and (min-width: 640px) and (hover: hover) and (pointer: fine)">
+        <link rel="preload" as="image" href="avatar-plain.png" fetchpriority="high" media="(min-width: 640px) and (hover: hover) and (pointer: fine)">
         <!-- Fonts: self-hosted (see assets/fonts/ + just fonts); @font-face inlined in <style> below -->
         <!-- Icons are inlined SVG (from Font Awesome Free 7.2.0) — see assets/icons/ and just icons -->
         <!-- Verification -->

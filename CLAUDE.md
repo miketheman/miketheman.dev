@@ -9,13 +9,13 @@ This is a `uv`-managed application project: `pyproject.toml` declares deps, `uv.
 ```bash
 just build     # uv run src/generate.py — render metadata.toml + templates/index.html.j2 into dist/index.html
 just serve     # build, then uv run src/serve.py (stdlib http.server on :8000, opens browser)
-just avatar    # uv run src/avatar.py — regenerates assets/avatar.png + assets/avatar-plain.png
+just avatar    # uv run src/avatar.py — regenerates assets/avatar.png + assets/avatar-plain.png + assets/favicon.png
 just icons     # uv run src/icons.py — fetches Font Awesome SVGs referenced in metadata.toml into assets/icons/
 just og        # uv run src/og.py — render templates/og.html.j2 → assets/og.png (1200x630 OG card)
 just fonts     # uv run src/fonts.py — downloads Google Fonts woff2 + rewrites CSS to self-host (assets/fonts/)
 just lint      # build, then biome check dist/ — HTML/CSS/a11y lint on rendered output
 just snapshot  # build, then uv run src/snapshot.py — captures desktop + mobile PNG snapshots for PR visual diffs
-just clean     # rm dist/index.html dist/avatar*.png
+just clean     # rm -rf dist/* — empties build output (keeps tracked dist/.gitkeep)
 ```
 
 Biome is expected to be on `PATH` locally (`brew install biome` or similar). CI installs it via the pinned `biomejs/setup-biome` action.
@@ -30,7 +30,7 @@ pyproject.toml / uv.lock    # deps (runtime + dev group with playwright)
 metadata.toml               # site content
 templates/index.html.j2     # single-page template with inline CSS + design tokens
 src/                        # scripts (cwd-relative — run from repo root)
-assets/                     # me.jpg (source photo) + avatar.png + avatar-plain.png (all committed)
+assets/                     # me.jpg (source photo) + avatar.png + avatar-plain.png + favicon.png (all committed)
 assets/icons/               # Font Awesome SVGs cached at brands/ and solid/, inlined at build time
 assets/fonts/               # self-hosted Google Fonts woff2 files (copied to dist/fonts/ at build)
 assets/fonts.css            # rewritten @font-face CSS inlined into the rendered page
@@ -42,8 +42,8 @@ dist/                       # build output (gitignored)
 
 Seven scripts sharing one project env:
 
-- **src/generate.py** (uses `minijinja`): reads `metadata.toml`, validates and sorts `[[extras]]` by ISO date descending, splits into `visible_extras` (first 5) and `expandable_extras` (rest), renders `templates/index.html.j2` → `dist/index.html`, writes the `[human]` block as `dist/human.json` (with `version` prepended — see https://codeberg.org/robida/human.json), copies `assets/avatar.png`, `assets/avatar-plain.png`, and the `assets/fonts/` directory into `dist/`. Inlines the contents of `assets/fonts.css` into the rendered `<style>` block and registers an `icon_svg()` function (via `env.add_function`) that reads pre-cached Font Awesome SVGs from `assets/icons/` and inlines them (no FA CSS/webfonts at runtime). MiniJinja autoescapes by template extension (`.html.j2` → on), so trusted URLs we supply (`site_url`, `avatar`, `link.url`, `extra.url`) are marked `| safe` in the template; free-text fields stay escaped.
-- **src/avatar.py** (uses `qrcode[pil]`): builds a QR code encoding `https://miketheman.dev` with a circular-cropped photo embedded in the center. Reads `assets/me.jpg`, writes `assets/avatar.png` (the QR) AND `assets/avatar-plain.png` (just the circular portrait, used on desktop via `<picture>`).
+- **src/generate.py** (uses `minijinja`): reads `metadata.toml`, validates and sorts `[[extras]]` by ISO date descending, splits into `visible_extras` (first 5) and `expandable_extras` (rest), renders `templates/index.html.j2` → `dist/index.html`, writes the `[human]` block as `dist/human.json` (with `version` prepended — see https://codeberg.org/robida/human.json), copies `assets/avatar.png`, `assets/avatar-plain.png`, `assets/favicon.png`, and the `assets/fonts/` directory into `dist/`. Inlines the contents of `assets/fonts.css` into the rendered `<style>` block and registers an `icon_svg()` function (via `env.add_function`) that reads pre-cached Font Awesome SVGs from `assets/icons/` and inlines them (no FA CSS/webfonts at runtime). MiniJinja autoescapes by template extension (`.html.j2` → on), so trusted URLs we supply (`site_url`, `link.url`, `extra.url`) are marked `| safe` in the template; free-text fields stay escaped.
+- **src/avatar.py** (uses `qrcode[pil]`): builds a QR code encoding `https://miketheman.dev` with a circular-cropped photo embedded in the center. Reads `assets/me.jpg`, writes `assets/avatar.png` (the QR), `assets/avatar-plain.png` (just the circular portrait, used on desktop via `<picture>`), AND `assets/favicon.png` (32x32 crop of the same portrait). **The favicon must stay small** — it was previously pointed at the 100 KB `avatar.png`, which the browser fetched separately on every load just to draw a 16px tab icon.
 - **src/icons.py** (stdlib only): parses `fa-{style} fa-{name}` classes from `metadata.toml`, downloads missing SVGs from `cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@{version}/svgs/{style}/{name}.svg` into `assets/icons/{style}/{name}.svg`. Existing files are skipped. Version is pinned in the script.
 - **src/fonts.py** (stdlib only): downloads the Google Fonts CSS for Petrona + Hanken Grotesk, fetches every referenced `fonts.gstatic.com/*.woff2`, rewrites the CSS with local `url(fonts/<name>.woff2)` references, and writes both the rewritten CSS (`assets/fonts.css`) and the woff2 files (`assets/fonts/*.woff2`). Existing woff2 files are skipped. **Sends a Chrome UA on purpose:** Google picks the file format from the User-Agent *and* the request shape, and a pinned single weight (`Petrona:wght@400`) served to a Firefox UA returns `.woff`, which the woff2-only regex skips — leaving absolute gstatic URLs in the output CSS and silently making the page fetch fonts at runtime. The script raises if any un-localized URL survives the rewrite. Changing the request does not delete the previous family's woff2 files; remove the orphans by hand.
 - **src/serve.py** (stdlib only): dev server rooted at `dist/`. Errors cleanly if `generate.py` hasn't run.
@@ -52,9 +52,9 @@ Seven scripts sharing one project env:
 
 Template is a single Jinja2-syntax file (rendered by `minijinja`) with inline `<style>` organized as `@layer tokens, base, components` (design tokens in `:root`, dark-mode overrides via `prefers-color-scheme`). Visual changes mean editing `templates/index.html.j2` directly.
 
-The page shows the QR avatar on touch/narrow devices and the plain circular portrait on desktop via `<picture>` with media `(min-width: 640px) and (hover: hover) and (pointer: fine)`. The in-page `<img>` uses a relative path (`avatar.png`); `{{ avatar }}` in OG/Twitter meta keeps the absolute URL.
+The page shows the QR avatar on touch/narrow devices and the plain circular portrait on desktop via `<picture>` with media `(min-width: 640px) and (hover: hover) and (pointer: fine)`. Every in-page image reference is relative (`avatar.png`, `avatar-plain.png`, `favicon.png`); the only absolute URLs are the OG/Twitter `content` values, built from `{{ site_url }}`.
 
-`assets/me.jpg`, `assets/avatar.png`, `assets/avatar-plain.png`, `assets/og.png`, `assets/icons/**`, `assets/fonts/**`, `assets/fonts.css`, and `assets/snapshots/*.png` are all committed — CI doesn't regenerate them. After changing metadata: `just icons` (if you referenced a new FA icon) before `just build`. After the source photo changes: `just avatar`. After a font-family / weight change: update `src/fonts.py` and `just fonts`. After visual changes: `just snapshot`. After changing `seo_title`, `seo_description`, `name`, `site_url`, or the OG card template/style: `just og`.
+`assets/me.jpg`, `assets/avatar.png`, `assets/avatar-plain.png`, `assets/favicon.png`, `assets/og.png`, `assets/icons/**`, `assets/fonts/**`, `assets/fonts.css`, and `assets/snapshots/*.png` are all committed — CI doesn't regenerate them. After changing metadata: `just icons` (if you referenced a new FA icon) before `just build`. After the source photo changes: `just avatar`. After a font-family / weight change: update `src/fonts.py` and `just fonts`. After visual changes: `just snapshot`. After changing `seo_title`, `seo_description`, `name`, `site_url`, or the OG card template/style: `just og`.
 
 ## Extras validation
 

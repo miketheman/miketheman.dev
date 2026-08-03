@@ -33,6 +33,7 @@ This is a modern, responsive personal website generator that creates a beautiful
 │   ├── me.jpg                  # Source photo for avatar generation
 │   ├── avatar.png              # QR with embedded portrait (mobile view, committed)
 │   ├── avatar-plain.png        # Plain circular portrait (desktop view, committed)
+│   ├── favicon.png             # 32x32 tab icon, portrait crop (committed)
 │   ├── icons/                  # Font Awesome SVGs (brands/, solid/) — inlined at build time
 │   ├── fonts/                  # Self-hosted Google Fonts woff2 files
 │   ├── fonts.css               # Rewritten @font-face CSS — inlined into <style>
@@ -63,7 +64,7 @@ Prefer the `just` recipes — they encode the canonical invocations:
 ```bash
 just build          # Generate the website
 just serve          # Build and start development server
-just avatar         # Regenerate avatar.png (QR) + avatar-plain.png (portrait)
+just avatar         # Regenerate avatar.png (QR) + avatar-plain.png (portrait) + favicon.png
 just icons          # Fetch Font Awesome SVGs referenced in metadata.toml
 just fonts          # Download + self-host Google Fonts into assets/fonts/
 just lint           # Build, then biome check dist/ (HTML/CSS/a11y lint)
@@ -87,7 +88,7 @@ uv run src/snapshot.py   # requires Playwright chromium: uv run playwright insta
 1. `src/generate.py` reads `metadata.toml`
 2. Renders the template (`templates/index.html.j2`) via minijinja
 3. Outputs to `dist/index.html`
-4. Copies `assets/avatar.png` and `assets/avatar-plain.png` → `dist/` if present
+4. Copies `assets/avatar.png`, `assets/avatar-plain.png`, `assets/favicon.png`, `assets/og.png`, and `assets/fonts/` → `dist/` if present
 
 ## Code Conventions
 
@@ -123,7 +124,7 @@ uv run src/snapshot.py   # requires Playwright chromium: uv run playwright insta
 ### Modifying Site Content
 
 Edit `metadata.toml` to update:
-- Profile information (name, title, description, avatar URL)
+- Profile information (name, title, description)
 - Social links (URL, label, icon class)
 
 ### Modifying Layout/Style
@@ -222,8 +223,8 @@ icon = "fa-brands fa-service"  # Font Awesome icon class
 ### Regenerating Avatar
 
 1. Replace `assets/me.jpg` with your own profile photo (same filename, or update `AVATAR_FILE_PATH` in `src/avatar.py`)
-2. Run: `just avatar` — produces `assets/avatar.png` (QR) and `assets/avatar-plain.png` (portrait)
-3. Rebuild site: `just build` — copies both into `dist/`
+2. Run: `just avatar` — produces `assets/avatar.png` (QR), `assets/avatar-plain.png` (portrait), and `assets/favicon.png` (32x32 tab icon)
+3. Rebuild site: `just build` — copies all three into `dist/`
 
 Note: The avatar.py script requires a personal photo file at the path you specify.
 

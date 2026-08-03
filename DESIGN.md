@@ -19,12 +19,11 @@ colors:
   new-growth: "#a2c087"
 typography:
   display:
-    fontFamily: "Fraunces, ui-serif, Georgia, serif"
-    fontSize: "clamp(2rem, 1.70rem + 1.50vw, 2.75rem)"
+    fontFamily: "Petrona, ui-serif, Georgia, serif"
+    fontSize: "clamp(2.0625rem, 1.77rem + 1.56vw, 2.875rem)"
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: "-0.015em"
-    fontVariation: "'opsz' 120"
   title:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem)"
@@ -95,9 +94,9 @@ components:
 
 **Creative North Star: "The Herbarium Sheet"**
 
-The page is a specimen mounted on warm paper. The QR avatar sits inside a double-ruled mat — an outer border and an inner hairline inset 8px from it — the way a pressed leaf is framed and labeled on an archival sheet. Below it the name is set once in a serif with its optical-size axis pushed wide open, the role is a tracked-out caps line held between two short green rules, and every link is a hairline-bordered entry mounted in the same column. Where a lesser page would put a `<hr>`, this one draws a leaf.
+The page is a specimen mounted on warm paper. The QR avatar sits inside a double-ruled mat — an outer border and an inner hairline inset 8px from it — the way a pressed leaf is framed and labeled on an archival sheet. Below it the name is set once in a warm humanist serif, the role is a tracked-out caps line held between two short green rules, and every link is a hairline-bordered entry mounted in the same column. Where a lesser page would put a `<hr>`, this one draws a leaf.
 
-The register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face rides its optical-size axis wide open so the name is drawn for the page it sits on; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.
+The register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face is a warm humanist serif whose letterforms keep a drawn, faintly calligraphic hand rather than a drafted one; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.
 
 Density is generous and vertical. One column, 36rem wide, centered in the viewport, stacked at a 1.5rem rhythm — the page is meant to be read in a hallway on a phone, seconds after someone scanned the code that is now looking back at them from the screen. It explicitly rejects the bio-link SaaS look (pill buttons, gradient hero, candy cards), the dev-portfolio dark-neon look (terminal green on black, mono everything, glow), and the generic SaaS landing look (rounded-xl cards, blue-500, soft drop shadows, Inter).
 
@@ -141,15 +140,17 @@ Warm paper stock and warm-black ink, with a single dried-botanical green as the 
 
 ## Typography
 
-**Display Font:** Fraunces (with `ui-serif`, Georgia, serif)
+**Display Font:** Petrona (with `ui-serif`, Georgia, serif)
 **Body Font:** Hanken Grotesk (with `ui-sans-serif`, `system-ui`, sans-serif)
 **Label Font:** Hanken Grotesk, uppercase and widely tracked — no third family
 
-**Character:** Fraunces is a variable soft-serif with an optical-size axis; here it runs at `opsz 120`, near the display end — wide apertures and a face that looks drawn rather than compiled. (The template also declares `"SOFT" 30`, but the self-hosted woff2 files ship only the `opsz` axis, so that declaration is currently inert. See the note below.) Hanken Grotesk underneath is humanist and unfussy, so the serif never has to compete. Both are self-hosted woff2 at weights 400 and 500 only; there is no 600, no 700, and no italic anywhere in the system.
+**Character:** Petrona is a warm humanist serif — wider and lower-contrast than an editorial display face, with terminals that read as drawn rather than drafted. It does not perform; it sits. That restraint is why it belongs on a page whose structure is entirely hairlines, and it is deliberately *not* a high-contrast fashion serif. Hanken Grotesk underneath is humanist and unfussy, so the serif never has to compete. Both are self-hosted woff2; Petrona ships at 400 only, Hanken Grotesk at 400 and 500. There is no 600, no 700, and no italic anywhere in the system.
+
+The display step carries a **~4% size premium** over the rest of the scale (`clamp(2.0625rem → 2.875rem)` rather than `2rem → 2.75rem`). Petrona's x-height runs smaller than Hanken Grotesk's, so at an identical `font-size` the name would surrender presence to the body copy beneath it.
 
 ### Hierarchy
 
-- **Display** (400, `clamp(2rem → 2.75rem)`, 1.1, `-0.015em`, `opsz 120`): The name. This is the only Fraunces on the page.
+- **Display** (400, `clamp(2.0625rem → 2.875rem)`, 1.1, `-0.015em`): The name. This is the only Petrona on the page.
 - **Title** (500, `clamp(0.875rem → 0.9375rem)`, `0.14em`, uppercase): The role line, centered and flanked by two 1.5rem × 1px green rules with a 0.75rem gap.
 - **Body** (400, `clamp(1rem → 1.0625rem)`, 1.55, max 30rem): The description and every link label.
 - **Label** (500, `clamp(0.75rem → 0.8125rem)`, `0.14em`, uppercase): The "Extras" section heading and the expander summary.
@@ -157,7 +158,7 @@ Warm paper stock and warm-black ink, with a single dried-botanical green as the 
 
 ### Named Rules
 
-**The Single Serif Rule.** Fraunces appears exactly once per page, on the name. The moment a second element takes the serif, the name stops being the anchor.
+**The Single Serif Rule.** Petrona appears exactly once per page, on the name. The moment a second element takes the serif, the name stops being the anchor. (The OG card is the one sanctioned exception: it sets both the name and the role line in Petrona, because a 1200×630 card has no hairline system to carry hierarchy.)
 
 **The Tracked-Caps Rule.** Anything secondary — role, section heading, expander — is uppercase at `0.14em`. Never letterspace lowercase text, and never set body copy in caps.
 
@@ -165,7 +166,7 @@ Warm paper stock and warm-black ink, with a single dried-botanical green as the 
 
 **The Tabular Date Rule.** Every date on the page is `font-variant-numeric: tabular-nums` at `0.06em`, so a stacked list of dates aligns down the column.
 
-**Axis note.** `src/fonts.py` requests `Fraunces:opsz,wght@9..144,400`, so Google serves an axis-subset containing `opsz` only. Verified with fontTools: the three shipped Fraunces woff2 files expose `opsz 9–144` and nothing else. To make `SOFT` real, add it to the request URL and re-run `just fonts`; otherwise drop it from the template. Any future `font-variation-settings` axis must be present in the request URL or it silently does nothing.
+**Font pipeline note.** `src/fonts.py` self-hosts from Google Fonts, and Google picks the file format from **both** the User-Agent and the request shape. A pinned single weight (`Petrona:wght@400`) served to a Firefox UA comes back as `.woff`, which the script's woff2-only regex skips — leaving absolute `fonts.gstatic.com` URLs in `assets/fonts.css` and silently converting self-hosted fonts into a runtime third-party fetch. The script now sends a Chrome UA (woff2, and a static instance at roughly half the variable font's size) and hard-fails if any un-localized URL survives the rewrite. Two rules follow: after changing the request, confirm the new woff2 files actually landed in `assets/fonts/` and delete the orphaned ones; and any `font-variation-settings` axis must appear in the request URL or it does nothing at all.
 
 ## Layout
 
@@ -206,13 +207,15 @@ Specimen labels, not buttons. Each is a hairline-bordered row mounted in the col
 - **Rest:** Transparent ground, ink label, muted icon.
 - **Hover / Focus:** Ground washes to the hover surface, border darkens to muted ink, and the icon greens to Pressed Fern. Three properties, 180ms, all on the same `cubic-bezier(0.2, 0.8, 0.2, 1)`.
 - **Active:** `translateY(1px)`. The whole tactile budget in one line.
-- **Extras variant:** Same row, with the label and a tabular date stacked in a `0.25rem` column beside the icon.
+- **Extras variant:** Same row, with the label and a tabular date stacked in a `0.25rem` column beside the icon. The icon pins to the **first line** of the label (`align-items: flex-start` plus a half-leading nudge) rather than centering against the whole block — a three-line title would otherwise strand its icon down beside the date.
 
 **The Greening Icon Rule.** The icon is the only thing that changes color on hover. It is the system's smallest, most-repeated moment of life; do not add a color change to the label too.
 
 ### Expander
 
-The "Show more (n)" control is a `<details>`/`<summary>` with its native marker removed. It borrows the link row's border, radius, hover wash, and hit target, but takes the tracked-caps Label voice at muted ink — so it reads as an instruction to the sheet, not another specimen on it.
+The expander is a `<details>`/`<summary>` with its native marker removed. It borrows the link row's border, radius, hover wash, and hit target, but takes the tracked-caps Label voice at muted ink — so it reads as an instruction to the sheet, not another specimen on it. Its label answers its own state: "Show more (n)" when closed, "Show less" when open, swapped in CSS off the `[open]` attribute with no JavaScript.
+
+**The Answering Label Rule.** A control's label states what the control will do next, never what it did. A toggle still reading "Show more" while its rows are open is a broken control, not a styling detail.
 
 ### Avatar Mat (signature)
 
@@ -247,7 +250,7 @@ A 120×16 inline SVG: two horizontal lines with a hand-plotted leaf between them
 
 - **Don't** add a `box-shadow` to a resting surface. Flat is the default; a floating element must justify itself.
 - **Don't** introduce a radius other than `2px` or `50%`.
-- **Don't** set a second element in Fraunces, or add a weight beyond 400 and 500.
+- **Don't** set a second element on the page in Petrona, or add a weight beyond 400 and 500.
 - **Don't** use an achromatic gray — every neutral here is warm.
 - **Don't** letterspace lowercase text, or set body copy in uppercase.
 - **Don't** drift toward the three rejected worlds: bio-link SaaS (pill buttons, gradients, candy cards), dev-portfolio dark neon (mono everything, glow, terminal green), or generic SaaS landing (rounded-xl, blue-500, Inter, drop shadows).

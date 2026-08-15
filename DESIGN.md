@@ -17,6 +17,8 @@ colors:
   night-rule: "#2d2b26"
   night-surface-hover: "#1e1c17"
   new-growth: "#a2c087"
+  flora-ink: "color-mix(in oklab, #5a554d 62%, transparent)"
+  night-flora-ink: "color-mix(in oklab, #a6a094 62%, transparent)"
 typography:
   display:
     fontFamily: "Petrona, ui-serif, Georgia, serif"
@@ -45,6 +47,10 @@ typography:
     fontWeight: 400
     letterSpacing: "0.06em"
     fontFeature: "'tnum'"
+  note:
+    fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(0.75rem, 0.73rem + 0.10vw, 0.8125rem)"
+    fontWeight: 400
 rounded:
   sm: "2px"
   full: "50%"
@@ -86,6 +92,13 @@ components:
   date-stamp:
     textColor: "{colors.ink-subtle}"
     typography: "{typography.meta}"
+  link-note:
+    textColor: "{colors.ink-subtle}"
+    typography: "{typography.note}"
+  margin-specimen:
+    backgroundColor: "transparent"
+    textColor: "{colors.flora-ink}"
+    height: "clamp(340px, 88svh, 780px)"
 ---
 
 # Design System: miketheman.dev
@@ -98,6 +111,8 @@ The page is a specimen mounted on warm paper. The QR avatar sits inside a double
 
 The register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face is a warm humanist serif whose letterforms keep a drawn, faintly calligraphic hand rather than a drafted one; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.
 
+That same hand extends past the column. Hairline herbs are mounted in the margins and grow up from the bottom edge on load, dealt fresh from a set of eight on every visit — the only thing on the page that is not identical between two readers. They are drawn, not decorated: thinned ink at the page's own line weight, in the margin and nowhere else, and they never cross a reading edge or the QR code.
+
 Density is generous and vertical. One column, 36rem wide, centered in the viewport, stacked at a 1.5rem rhythm — the page is meant to be read in a hallway on a phone, seconds after someone scanned the code that is now looking back at them from the screen. It explicitly rejects the bio-link SaaS look (pill buttons, gradient hero, candy cards), the dev-portfolio dark-neon look (terminal green on black, mono everything, glow), and the generic SaaS landing look (rounded-xl cards, blue-500, soft drop shadows, Inter).
 
 **Key Characteristics:**
@@ -109,6 +124,7 @@ Density is generous and vertical. One column, 36rem wide, centered in the viewpo
 - Serif display voice used exactly once; everything else humanist grotesque
 - Uppercase, widely tracked labels for anything secondary
 - A drawn botanical ornament in place of a divider
+- Hand-plotted herbs in the margins, varying per visit, never over content
 
 ## Colors
 
@@ -127,6 +143,7 @@ Warm paper stock and warm-black ink, with a single dried-botanical green as the 
 - **Muted Ink** (`{colors.ink-muted}`) / **Weathered Bone** (`{colors.night-ink-muted}`): The role line, the description, section headings, expander label, and link icons at rest. The step down from primary text that carries most of the page's hierarchy.
 - **Subtle Ink** (`{colors.ink-subtle}`) / **Faded Bone** (`{colors.night-ink-subtle}`): Dates and the footer stamp only — the quietest tier.
 - **Rule** (`{colors.rule}`) / **Night Rule** (`{colors.night-rule}`): Every 1px border on the page: link rows, the mat, the expander, the inner hairline.
+- **Flora Ink** (`{colors.flora-ink}`) / **Night Flora Ink** (`{colors.night-flora-ink}`): The margin specimens only — the muted ink thinned to 62%, so it sits between the rule and the text tiers. Not a new hue; the page's own ink, watered down.
 - **Hover Wash** (`{colors.surface-hover}`) / **Night Wash** (`{colors.night-surface-hover}`): The single-step background shift on hover and focus for link rows and the expander.
 - **QR White** (`{colors.qr-white}`): The mat behind the QR code. Pure white, in both themes.
 
@@ -176,12 +193,16 @@ The profile stack is a flex column with a uniform `1.5rem` gap: avatar, name, ro
 
 Spacing is a 4px geometric scale (`0.25 / 0.5 / 0.75 / 1 / 1.5 / 3rem`). Note the deliberate gap: there is no `2rem` step. Sections either breathe at `1.5rem` or break at `3rem`.
 
-Two breakpoints, and only one of them is about width:
+Four breakpoints, and only one of them decides the avatar:
 
+- **`max-width: 22rem`** — the link row wraps, dropping a row's note under its label instead of beside it. Below 22rem there is genuinely no room on the line; keep notes short enough that this stays an edge case.
 - **`max-width: 600px`** — the QR mat narrows from 512px to 320px so the code stays comfortably in thumb reach.
-- **`(min-width: 640px) and (hover: hover) and (pointer: fine)`** — a capability query, not a size query. Pointer devices get the plain circular portrait; anything touch-capable keeps the scannable QR. The `<picture>` source and both `<link rel=preload>` tags use this exact query, so only one avatar is ever fetched.
+- **`(min-width: 640px) and (hover: hover) and (pointer: fine)`** — a capability query, not a size query. Pointer devices get the plain circular portrait at `220px`; anything touch-capable keeps the scannable QR. The `<picture>` source and both `<link rel=preload>` tags use this exact query, so only one avatar is ever fetched.
+- **`56rem`** — the margin specimens switch treatment. Above it a gutter exists and they live in it; below it there is none and a single specimen fringes the right edge instead. See Margin Specimens.
 
 **The Capability-Not-Width Rule.** The avatar switch is decided by `hover` and `pointer`, not by viewport alone. A phone held in landscape at 800px is still a phone, and it still gets the QR.
+
+**The Gutter-Is-Earned Rule.** Anything living outside the column sizes itself from the space that actually exists — `(50vw - half the column - air)` — rather than from a viewport width guess. It then shrinks to nothing on its own as the margin closes, with no breakpoint needed to hide it.
 
 ## Elevation & Depth
 
@@ -208,6 +229,7 @@ Specimen labels, not buttons. Each is a hairline-bordered row mounted in the col
 - **Hover / Focus:** Ground washes to the hover surface, border darkens to muted ink, and the icon greens to Pressed Fern. Three properties, 180ms, all on the same `cubic-bezier(0.2, 0.8, 0.2, 1)`.
 - **Active:** `translateY(1px)`. The whole tactile budget in one line.
 - **Extras variant:** Same row, with the label and a tabular date stacked in a `0.25rem` column beside the icon. The icon pins to the **first line** of the label (`align-items: flex-start` plus a half-leading nudge) rather than centering against the whole block — a three-line title would otherwise strand its icon down beside the date.
+- **Note variant:** A row may carry a short disambiguating note (`miketheman.net`, `Python Package Index`) flush right on the label's own line, in the Note voice at subtle ink. It rides the line rather than stacking so a row with a note is the same height as a row without one.
 
 **The Greening Icon Rule.** The icon is the only thing that changes color on hover. It is the system's smallest, most-repeated moment of life; do not add a color change to the label too.
 
@@ -229,6 +251,24 @@ The title is a flex row whose `::before` and `::after` are `1.5rem × 1px` bars 
 
 A 120×16 inline SVG: two horizontal lines with a hand-plotted leaf between them, drawn in `currentColor` at the accent green, stroke-width 1 with a 0.6 vein. It replaces the divider above the Extras section and is `aria-hidden`. This is the page's single decorative flourish, and it is load-bearing — it is what makes the sheet feel drawn.
 
+### Margin Specimens (signature)
+
+Eight herbs — fern, rosemary, sage, thyme, lavender, dill, chives, bay — plotted by hand as hairline SVG in a `120×300` box, in the same drawn hand as the ornament. Each is a stem path plus one compound path per side, and the geometry is derived by sampling the stem curve and orienting leaves off its local tangent, so a frond follows its stem instead of sitting on it. They are `aria-hidden`, `pointer-events: none`, and live in a `position: fixed` layer beneath the column.
+
+- **Ink:** `{colors.flora-ink}` — the muted ink thinned to 62%, never the accent. At rule strength they vanished against the paper; a rule is read at 1px beside its neighbour, a specimen is read as a whole shape across a lot of empty margin.
+- **Stroke:** `0.55` user units against the ~2.1–2.6× render scale, landing at roughly 1.2–1.4px. Sage carries midribs at `0.33`, the same secondary weight as the ornament's vein.
+- **Above 56rem:** two specimens, one per gutter, mirrored. Height is capped by the gutter itself so they never touch the column.
+- **Below 56rem:** one specimen on the **right** edge, wider and more of it revealed, with a `mask-image` cutting its inner side away. Only leaf tips and a thinned stem reach the text.
+- **Motion:** a mask sweeping up from the bottom edge over `2.6s`, once, on load. The two gutter specimens are offset `600ms` so they don't grow in lockstep.
+
+**The Right-Edge Rule.** On a phone the specimen goes on the right. Every link row is left-aligned — icon, then label — so the left edge is where the eye lands on every line. Measured on the real page, the same plant on the left touches seven text elements including all six link labels; on the right it touches three, and none of them is a label.
+
+**The Watermark-Not-Wallpaper Rule.** Background botanicals are drawn in thinned ink at hairline weight, and they never sit behind a QR code, a control, or the start of a line. If a specimen would cross a reading edge, move it or mask it — do not merely fade it, because the opacity that stops it being a distraction also stops it being visible.
+
+### Determination Slip
+
+The provenance line and the date stamp at the foot of the sheet, centred in a `<footer>` at `3rem` from the content. They read as one annotation block, not two stray lines: the provenance states the identity claims in the Note voice with underlined links, and the date stamp sits under it in the Meta voice at `tabular-nums`. Both are subtle ink, the page's quietest tier.
+
 ### Focus
 
 `2px solid` accent outline at `3px` offset with a `2px` radius, applied globally through `:focus-visible`. Keyboard focus is styled once, in the base layer, and every component inherits it.
@@ -242,7 +282,7 @@ A 120×16 inline SVG: two horizontal lines with a hand-plotted leaf between them
 - **Do** compose any new section the same way the Extras section is composed: ornament, tracked-caps heading, then specimen rows.
 - **Do** set every date with `tabular-nums` and `0.06em` tracking so columns of dates align.
 - **Do** honor the `44px` minimum hit height on anything interactive — this page is used on phones, one-handed, standing up.
-- **Do** route all motion through `--dur` / `--ease`, which `prefers-reduced-motion` already zeroes at the token level.
+- **Do** route interaction motion through `--dur` / `--ease` (180ms), and ambient motion through `--dur-grow` / `--ease-grow` (2600ms). Both are zeroed by `prefers-reduced-motion` at the token level, and every animation's resting state is its end state, so zeroing a duration lands on the finished result rather than hiding it.
 - **Do** self-host any new font or icon and inline it at build time; nothing on this page fetches from a third party at load.
 - **Do** keep the QR mat pure black-on-white in every theme.
 
@@ -256,3 +296,5 @@ A 120×16 inline SVG: two horizontal lines with a hand-plotted leaf between them
 - **Don't** drift toward the three rejected worlds: bio-link SaaS (pill buttons, gradients, candy cards), dev-portfolio dark neon (mono everything, glow, terminal green), or generic SaaS landing (rounded-xl, blue-500, Inter, drop shadows).
 - **Don't** widen the column past `36rem` or run description copy past `30rem`.
 - **Don't** swap the QR avatar out of the anchor position — it is the page's identity device and it circulates offline.
+- **Don't** let a background element cross a reading edge, a control, or the QR mat. The margin is the only place it may live.
+- **Don't** give the margin specimens the accent green. They are structure in thinned ink; the green stays on its four jobs.

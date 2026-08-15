@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-02T19:35:00-04:00",
+  "generatedAt": "2026-08-15T11:42:09-04:00",
   "title": "Design System: miketheman.dev",
   "extensions": {
     "colorMeta": {
@@ -138,6 +138,36 @@
           "oklch(88% 0.045 130)",
           "oklch(96% 0.020 130)"
         ]
+      },
+      "flora-ink": {
+        "role": "neutral",
+        "displayName": "Flora Ink",
+        "canonical": "color-mix(in oklab, #5a554d 62%, transparent)",
+        "tonalRamp": [
+          "oklch(15% 0.011 85)",
+          "oklch(27% 0.011 85)",
+          "oklch(39% 0.011 85)",
+          "oklch(51% 0.011 85)",
+          "oklch(63% 0.011 85)",
+          "oklch(75% 0.011 85)",
+          "oklch(86% 0.011 85)",
+          "oklch(95% 0.011 85)"
+        ]
+      },
+      "night-flora-ink": {
+        "role": "neutral",
+        "displayName": "Night Flora Ink",
+        "canonical": "color-mix(in oklab, #a6a094 62%, transparent)",
+        "tonalRamp": [
+          "oklch(15% 0.009 90)",
+          "oklch(27% 0.009 90)",
+          "oklch(39% 0.009 90)",
+          "oklch(51% 0.009 90)",
+          "oklch(63% 0.009 90)",
+          "oklch(75% 0.009 90)",
+          "oklch(86% 0.009 90)",
+          "oklch(95% 0.009 90)"
+        ]
       }
     },
     "typographyMeta": {
@@ -160,6 +190,10 @@
       "meta": {
         "displayName": "Meta",
         "purpose": "Dates and the footer stamp. Tabular numerals so stacked dates align down the column."
+      },
+      "note": {
+        "displayName": "Note",
+        "purpose": "Short disambiguating notes beside a link label. Same size as Meta, but no tracking and no tabular figures \u2014 it is prose, not a measurement."
       }
     },
     "shadows": [],
@@ -173,6 +207,16 @@
         "name": "dur",
         "value": "180ms",
         "purpose": "The only duration. Zeroed to 0ms at the token level under prefers-reduced-motion, so no component needs its own media query."
+      },
+      {
+        "name": "dur-grow",
+        "value": "2600ms",
+        "purpose": "Ambient motion only: the margin specimens growing in on load. Far longer than an interaction duration because nothing waits on it. Zeroed under prefers-reduced-motion, landing on the resting state."
+      },
+      {
+        "name": "ease-grow",
+        "value": "cubic-bezier(0.45, 0.05, 0.25, 1)",
+        "purpose": "Starts slow and settles long, the way a thing grows. A standard UI ease-out finished in the first third and then crawled."
       }
     ],
     "breakpoints": [
@@ -185,6 +229,16 @@
         "name": "pointer-fine",
         "value": "(min-width: 640px) and (hover: hover) and (pointer: fine)",
         "purpose": "Capability query, not a size query. Pointer devices get the circular portrait; anything touch-capable keeps the scannable QR."
+      },
+      {
+        "name": "note-wrap",
+        "value": "22rem",
+        "purpose": "Max-width query: a link row wraps and its note drops under the label instead of riding beside it."
+      },
+      {
+        "name": "gutter",
+        "value": "56rem",
+        "purpose": "The margin specimens switch treatment. Above it a gutter exists and two live in it; below it one fringes the right edge instead."
       }
     ]
   },
@@ -252,11 +306,27 @@
       "description": "The quietest tier: tabular numerals at 0.06em tracking, used for extra dates and the footer's Updated stamp so stacked dates align down the column.",
       "html": "<div class=\"ds-footer-stamp\">Updated 2026-08-02</div>",
       "css": ".ds-footer-stamp { text-align: center; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-variant-numeric: tabular-nums; letter-spacing: 0.06em; color: #6b6559; }"
+    },
+    {
+      "name": "Margin Specimen",
+      "kind": "custom",
+      "refersTo": "margin-specimen",
+      "description": "Signature. One of eight hand-plotted herbs mounted in the page margin, drawn in thinned ink at the page's own hairline weight. Two flank the column above 56rem; one fringes the right edge below it. Never crosses a reading edge or the QR mat.",
+      "html": "<div class=\"ds-specimen\"><svg class=\"ds-specimen-svg\" aria-hidden=\"true\" viewBox=\"0 0 120 300\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"0.55\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M74 300C80 202 40 134 24 16\"/><path d=\"M74.5 288.4Q61.2 273.5 47.4 275.5M74.4 268.6Q61.4 255.8 48.8 258.3M73.2 249.5Q60.3 238.2 48.8 241.3M71 230.9Q58.4 220.9 47.8 224.3M67.9 212.5Q55.8 203.7 45.9 207.3M64.2 194.3Q52.5 186.4 43.5 190.1M59.9 176Q48.8 168.9 40.4 172.5M55.2 157.6Q44.8 151.1 37 154.5M50.2 138.7Q40.6 132.7 33.3 136M45.2 119.4Q36.2 113.8 29.5 116.7M40.1 99.3Q32 94 25.8 96.7M35.2 78.4Q27.9 73.4 22.1 75.7M30.7 56.5Q24.1 51.7 18.8 53.7M26.6 33.3Q20.8 28.9 15.9 30.5\"/><path d=\"M74.5 288.4Q88.6 274.2 102.2 276.9M74.4 268.6Q86.5 254.9 99.2 256.5M73.2 249.5Q83.7 236.1 95.6 236.9M71 230.9Q80.2 217.8 91.4 218M67.9 212.5Q76.1 199.9 86.5 199.7M64.2 194.3Q71.4 182.2 81.2 181.7M59.9 176Q66.4 164.6 75.5 163.9M55.2 157.6Q61.1 146.8 69.6 146.1M50.2 138.7Q55.7 128.7 63.6 128M45.2 119.4Q50.3 110.1 57.6 109.5M40.1 99.3Q44.9 90.9 51.7 90.4M35.2 78.4Q39.8 70.8 46 70.4M30.7 56.5Q35 49.6 40.7 49.5M26.6 33.3Q30.7 27.3 35.8 27.3\"/></g></svg></div>",
+      "css": ".ds-specimen { display: flex; justify-content: center; padding: 1rem 0; color: color-mix(in oklab, #5a554d 62%, transparent); } .ds-specimen-svg { height: 320px; width: auto; display: block; animation: ds-grow 2600ms cubic-bezier(0.45, 0.05, 0.25, 1) backwards; mask-image: linear-gradient(to top, #000 0 var(--ds-grow, 100%), transparent calc(var(--ds-grow, 100%) + 14%)); } @property --ds-grow { syntax: '<percentage>'; inherits: false; initial-value: 100%; } @keyframes ds-grow { from { --ds-grow: -15%; } }"
+    },
+    {
+      "name": "Determination Slip",
+      "kind": "custom",
+      "refersTo": "date-stamp",
+      "description": "The provenance line and date stamp at the foot of the sheet, read as one annotation block rather than two stray lines. The page's quietest tier.",
+      "html": "<footer class=\"ds-slip\"><p class=\"ds-slip-prov\">Identity: <a href=\"#\">verified on Mastodon</a>, published as <a href=\"#\">human.json</a></p><p class=\"ds-slip-date\">Updated 2026-08-15</p></footer>",
+      "css": ".ds-slip { text-align: center; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; color: #6b6559; } .ds-slip-prov { margin: 0; line-height: 1.55; text-wrap: balance; } .ds-slip-prov a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; } .ds-slip-date { margin: 0.75rem 0 0; font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }"
     }
   ],
   "narrative": {
     "northStar": "The Herbarium Sheet",
-    "overview": "The page is a specimen mounted on warm paper. The QR avatar sits inside a double-ruled mat \u2014 an outer border and an inner hairline inset 8px from it \u2014 the way a pressed leaf is framed and labeled on an archival sheet. Below it the name is set once in a serif with its optical-size axis pushed wide open, the role is a tracked-out caps line held between two short green rules, and every link is a hairline-bordered entry mounted in the same column. Where a lesser page would put a <hr>, this one draws a leaf.\n\nThe register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face rides a SOFT variation axis that rounds its terminals; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.\n\nDensity is generous and vertical. One column, 36rem wide, centered in the viewport, stacked at a 1.5rem rhythm \u2014 the page is meant to be read in a hallway on a phone, seconds after someone scanned the code that is now looking back at them from the screen. It explicitly rejects the bio-link SaaS look (pill buttons, gradient hero, candy cards), the dev-portfolio dark-neon look (terminal green on black, mono everything, glow), and the generic SaaS landing look (rounded-xl cards, blue-500, soft drop shadows, Inter).",
+    "overview": "The page is a specimen mounted on warm paper. The QR avatar sits inside a double-ruled mat \u2014 an outer border and an inner hairline inset 8px from it \u2014 the way a pressed leaf is framed and labeled on an archival sheet. Below it the name is set once in a warm humanist serif, the role is a tracked-out caps line held between two short green rules, and every link is a hairline-bordered entry mounted in the same column. Where a lesser page would put a `<hr>`, this one draws a leaf.\n\nThe register is handmade and tactile, with a little wryness. The hand is visible on purpose: the ornament is a four-command SVG path someone plotted by hand, not a glyph from an icon set; the display face is a warm humanist serif whose letterforms keep a drawn, faintly calligraphic hand rather than a drafted one; the accent green is the color of a dried specimen rather than a brand. Nothing here is generated-looking, and nothing here shouts. There is exactly one chromatic voice on the entire page, and it is used about six times.\n\nThat same hand extends past the column. Hairline herbs are mounted in the margins and grow up from the bottom edge on load, dealt fresh from a set of eight on every visit \u2014 the only thing on the page that is not identical between two readers. They are drawn, not decorated: thinned ink at the page's own line weight, in the margin and nowhere else, and they never cross a reading edge or the QR code.\n\nDensity is generous and vertical. One column, 36rem wide, centered in the viewport, stacked at a 1.5rem rhythm \u2014 the page is meant to be read in a hallway on a phone, seconds after someone scanned the code that is now looking back at them from the screen. It explicitly rejects the bio-link SaaS look (pill buttons, gradient hero, candy cards), the dev-portfolio dark-neon look (terminal green on black, mono everything, glow), and the generic SaaS landing look (rounded-xl cards, blue-500, soft drop shadows, Inter).",
     "keyCharacteristics": [
       "Warm paper and ink, never white-and-gray",
       "One green, used sparingly, as the only chroma",
@@ -264,7 +334,8 @@
       "Near-square 2px corners \u2014 the desktop portrait is the only circle",
       "Serif display voice used exactly once; everything else humanist grotesque",
       "Uppercase, widely tracked labels for anything secondary",
-      "A drawn botanical ornament in place of a divider"
+      "A drawn botanical ornament in place of a divider",
+      "Hand-plotted herbs in the margins, varying per visit, never over content"
     ],
     "rules": [
       {
@@ -274,22 +345,22 @@
       },
       {
         "name": "The Un-themed QR Rule",
-        "body": "The QR mat and code stay pure black on pure white in every theme. A phone camera in bad venue lighting outranks palette coherence. Do not add prefers-color-scheme overrides for QR White.",
+        "body": "The QR mat and code stay pure black on pure white in every theme. A phone camera in bad venue lighting outranks palette coherence. Do not add `prefers-color-scheme` overrides for `{colors.qr-white}`.",
         "section": "colors"
       },
       {
         "name": "The Warm Neutral Rule",
-        "body": "No neutral on this page is achromatic. Every gray carries the paper's yellow-warm cast. Dropping a #888 or a #f5f5f5 into this system reads instantly as foreign.",
+        "body": "No neutral on this page is achromatic. Every gray carries the paper's yellow-warm cast. Dropping a `#888` or a `#f5f5f5` into this system reads instantly as foreign.",
         "section": "colors"
       },
       {
         "name": "The Single Serif Rule",
-        "body": "Petrona appears exactly once per page, on the name. The moment a second element takes the serif, the name stops being the anchor. The OG card is the one sanctioned exception: it sets both name and role in Petrona, because a 1200x630 card has no hairline system to carry hierarchy.",
+        "body": "Petrona appears exactly once per page, on the name. The moment a second element takes the serif, the name stops being the anchor. (The OG card is the one sanctioned exception: it sets both the name and the role line in Petrona, because a 1200\u00d7630 card has no hairline system to carry hierarchy.)",
         "section": "typography"
       },
       {
         "name": "The Tracked-Caps Rule",
-        "body": "Anything secondary \u2014 role, section heading, expander \u2014 is uppercase at 0.14em. Never letterspace lowercase text, and never set body copy in caps.",
+        "body": "Anything secondary \u2014 role, section heading, expander \u2014 is uppercase at `0.14em`. Never letterspace lowercase text, and never set body copy in caps.",
         "section": "typography"
       },
       {
@@ -299,12 +370,17 @@
       },
       {
         "name": "The Tabular Date Rule",
-        "body": "Every date on the page is font-variant-numeric: tabular-nums at 0.06em, so a stacked list of dates aligns down the column.",
+        "body": "Every date on the page is `font-variant-numeric: tabular-nums` at `0.06em`, so a stacked list of dates aligns down the column.",
         "section": "typography"
       },
       {
         "name": "The Capability-Not-Width Rule",
-        "body": "The avatar switch is decided by hover and pointer, not by viewport alone. A phone held in landscape at 800px is still a phone, and it still gets the QR.",
+        "body": "The avatar switch is decided by `hover` and `pointer`, not by viewport alone. A phone held in landscape at 800px is still a phone, and it still gets the QR.",
+        "section": "layout"
+      },
+      {
+        "name": "The Gutter-Is-Earned Rule",
+        "body": "Anything living outside the column sizes itself from the space that actually exists \u2014 `(50vw - half the column - air)` \u2014 rather than from a viewport width guess. It then shrinks to nothing on its own as the margin closes, with no breakpoint needed to hide it.",
         "section": "layout"
       },
       {
@@ -314,7 +390,7 @@
       },
       {
         "name": "The 2px Rule",
-        "body": "2px or 50%. Nothing in between \u2014 no 4px, no 8px, no rounded-xl.",
+        "body": "`2px` or `50%`. Nothing in between \u2014 no `4px`, no `8px`, no `rounded-xl`.",
         "section": "shapes"
       },
       {
@@ -326,27 +402,39 @@
         "name": "The Answering Label Rule",
         "body": "A control's label states what the control will do next, never what it did. A toggle still reading \"Show more\" while its rows are open is a broken control, not a styling detail.",
         "section": "components"
+      },
+      {
+        "name": "The Right-Edge Rule",
+        "body": "On a phone the specimen goes on the right. Every link row is left-aligned \u2014 icon, then label \u2014 so the left edge is where the eye lands on every line. Measured on the real page, the same plant on the left touches seven text elements including all six link labels; on the right it touches three, and none of them is a label.",
+        "section": "components"
+      },
+      {
+        "name": "The Watermark-Not-Wallpaper Rule",
+        "body": "Background botanicals are drawn in thinned ink at hairline weight, and they never sit behind a QR code, a control, or the start of a line. If a specimen would cross a reading edge, move it or mask it \u2014 do not merely fade it, because the opacity that stops it being a distraction also stops it being visible.",
+        "section": "components"
       }
     ],
     "dos": [
-      "Do keep Pressed Fern to its four jobs \u2014 flanking rules, ornament, icon hover, focus ring. New accents belong nowhere.",
-      "Do build depth with 1px rules in the rule color, and let :active translateY(1px) carry the tactility.",
-      "Do compose any new section the same way the Extras section is composed: ornament, tracked-caps heading, then specimen rows.",
-      "Do set every date with tabular-nums and 0.06em tracking so columns of dates align.",
-      "Do honor the 44px minimum hit height on anything interactive \u2014 this page is used on phones, one-handed, standing up.",
-      "Do route all motion through --dur / --ease, which prefers-reduced-motion already zeroes at the token level.",
-      "Do self-host any new font or icon and inline it at build time; nothing on this page fetches from a third party at load.",
-      "Do keep the QR mat pure black-on-white in every theme."
+      "**Do** keep Pressed Fern to its four jobs \u2014 flanking rules, ornament, icon hover, focus ring. New accents belong nowhere.",
+      "**Do** build depth with 1px rules in the `rule` color, and let `:active` `translateY(1px)` carry the tactility.",
+      "**Do** compose any new section the same way the Extras section is composed: ornament, tracked-caps heading, then specimen rows.",
+      "**Do** set every date with `tabular-nums` and `0.06em` tracking so columns of dates align.",
+      "**Do** honor the `44px` minimum hit height on anything interactive \u2014 this page is used on phones, one-handed, standing up.",
+      "**Do** route interaction motion through `--dur` / `--ease` (180ms), and ambient motion through `--dur-grow` / `--ease-grow` (2600ms). Both are zeroed by `prefers-reduced-motion` at the token level, and every animation's resting state is its end state, so zeroing a duration lands on the finished result rather than hiding it.",
+      "**Do** self-host any new font or icon and inline it at build time; nothing on this page fetches from a third party at load.",
+      "**Do** keep the QR mat pure black-on-white in every theme."
     ],
     "donts": [
-      "Don't add a box-shadow to a resting surface. Flat is the default; a floating element must justify itself.",
-      "Don't introduce a radius other than 2px or 50%.",
-      "Don't set a second element on the page in Petrona, or add a weight beyond 400 and 500.",
-      "Don't use an achromatic gray \u2014 every neutral here is warm.",
-      "Don't letterspace lowercase text, or set body copy in uppercase.",
-      "Don't drift toward the three rejected worlds: bio-link SaaS (pill buttons, gradients, candy cards), dev-portfolio dark neon (mono everything, glow, terminal green), or generic SaaS landing (rounded-xl, blue-500, Inter, drop shadows).",
-      "Don't widen the column past 36rem or run description copy past 30rem.",
-      "Don't swap the QR avatar out of the anchor position \u2014 it is the page's identity device and it circulates offline."
+      "**Don't** add a `box-shadow` to a resting surface. Flat is the default; a floating element must justify itself.",
+      "**Don't** introduce a radius other than `2px` or `50%`.",
+      "**Don't** set a second element on the page in Petrona, or add a weight beyond 400 and 500.",
+      "**Don't** use an achromatic gray \u2014 every neutral here is warm.",
+      "**Don't** letterspace lowercase text, or set body copy in uppercase.",
+      "**Don't** drift toward the three rejected worlds: bio-link SaaS (pill buttons, gradients, candy cards), dev-portfolio dark neon (mono everything, glow, terminal green), or generic SaaS landing (rounded-xl, blue-500, Inter, drop shadows).",
+      "**Don't** widen the column past `36rem` or run description copy past `30rem`.",
+      "**Don't** swap the QR avatar out of the anchor position \u2014 it is the page's identity device and it circulates offline.",
+      "**Don't** let a background element cross a reading edge, a control, or the QR mat. The margin is the only place it may live.",
+      "**Don't** give the margin specimens the accent green. They are structure in thinned ink; the green stays on its four jobs."
     ]
   }
 }

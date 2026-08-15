@@ -514,19 +514,27 @@
       .flora-plant--l { left: -5rem; }
       .flora-plant--r { right: -5rem; transform: scaleX(-1); }
 
-      /* Narrow: there is no gutter, so the specimens sit behind the column. A
-         stem running diagonally through a paragraph reads as a scratch on the
-         screen, so the inner side is masked away — what reaches the text is a
-         fringe of leaf tips, and the stems stay off the page entirely.
+      /* Narrow: one specimen, not two, and never centred.
 
-         One declaration covers both sides: it fades toward its own local right,
-         and the right-hand plant is mirrored, so on screen both fade toward the
-         middle. The QR mat is opaque in every theme, so scanning is untouched. */
+         Two edge fringes gave a phone leaf tips with no visible stem, which
+         reads as texture rather than as a plant. A single specimen with enough
+         of itself showing reads as the thing it is. Centring it was worse than
+         either: the column is the whole screen here, so a centred stem runs
+         straight down through the name, the role line and every link row — a
+         scratch across exactly where the eye reads.
+
+         So it stays at the edge, wide enough to be a plant, and only its outer
+         leaves and a thinned stem reach the text. The QR mat is opaque in every
+         theme, so scanning is untouched, and the stem appears to grow out from
+         behind it. */
       @media (max-width: 55.99rem) {
-        .flora-plant {
-          height: calc(clamp(340px, 76svh, 620px) * var(--flora-scale, 1));
-          opacity: 0.55;
-          --fringe: linear-gradient(to right, #000 0 15%, transparent 60%);
+        .flora-plant--r { display: none; }
+
+        .flora-plant--l {
+          left: -3rem;
+          height: calc(clamp(360px, 88svh, 680px) * var(--flora-scale, 1));
+          opacity: 0.6;
+          --fringe: linear-gradient(to right, #000 0 42%, transparent 88%);
         }
       }
 

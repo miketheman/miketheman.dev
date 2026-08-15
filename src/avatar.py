@@ -9,7 +9,9 @@ from qrcode.image.styles.moduledrawers.pil import RoundedModuleDrawer
 
 AVATAR_FILE_PATH = pathlib.Path("assets/me.jpg")
 QR_OUTPUT_PATH = pathlib.Path("assets/avatar.png")
+QR_WEBP_PATH = pathlib.Path("assets/avatar.webp")
 PLAIN_OUTPUT_PATH = pathlib.Path("assets/avatar-plain.png")
+PLAIN_WEBP_PATH = pathlib.Path("assets/avatar-plain.webp")
 PLAIN_OUTPUT_SIZE = (512, 512)
 FAVICON_OUTPUT_PATH = pathlib.Path("assets/favicon.png")
 FAVICON_OUTPUT_SIZE = (32, 32)
@@ -46,3 +48,9 @@ avatar = qr.make_image(
     module_drawer=RoundedModuleDrawer(),
 )
 avatar.save(QR_OUTPUT_PATH)
+
+# WebP alongside each PNG — the portrait was 77% of the page's transfer weight,
+# and it's preloaded, so it competes for bandwidth during first paint. The PNGs
+# stay as the <picture> fallback. Lossless for the QR: scanners read edges.
+Image.open(PLAIN_OUTPUT_PATH).save(PLAIN_WEBP_PATH, quality=88, method=6)
+Image.open(QR_OUTPUT_PATH).save(QR_WEBP_PATH, lossless=True, method=6)

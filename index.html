@@ -186,6 +186,20 @@
         --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
         --dur: 180ms;
 
+        /* The margin specimens grow in once, on load. Far slower than any UI
+           transition because it isn't one — nothing waits on it and nothing is
+           only legible after it. The curve starts slow and settles long, the
+           way a thing grows; a standard UI ease-out finished in the first third
+           and then crawled. */
+        --dur-grow: 2600ms;
+        --ease-grow: cubic-bezier(0.45, 0.05, 0.25, 1);
+        /* Mixed from the muted ink rather than set to the rule color: a rule is
+           read at 1px against paper it sits next to, but a specimen is read as a
+           whole shape across a lot of empty margin, and at rule strength it
+           disappeared. Still no new hue — this is the page's own ink, thinned. */
+        --flora-ink: color-mix(in oklab, var(--c-fg-muted) 62%, transparent);
+        --flora-opacity: 1;
+
         /* A11y */
         --hit: 44px;
         --focus-ring: 2px solid var(--c-accent);
@@ -208,8 +222,11 @@
         }
       }
 
+      /* Zeroing the duration lands the growth on its end state, which is also
+         its resting state — so reduced motion still gets the specimens, just
+         already grown. Nothing meaningful is conveyed only by the movement. */
       @media (prefers-reduced-motion: reduce) {
-        :root { --dur: 0ms; }
+        :root { --dur: 0ms; --dur-grow: 0ms; }
       }
     }
 
@@ -242,6 +259,8 @@
 
     @layer components {
       .container {
+        position: relative;
+        z-index: 1;
         width: 100%;
         max-width: var(--container);
       }
@@ -522,10 +541,207 @@
         font-variant-numeric: tabular-nums;
         letter-spacing: var(--tracking-wide);
       }
+
+      /* ---------------------------------------------------------------------
+         Margin specimens
+
+         Hairline herbs that grow up out of the bottom edge on load. Everything
+         they need lives in this block; the only pieces outside it are the four
+         tokens in :root, where every token on this page lives. Last in the
+         layer because they sit behind the sheet — nothing above depends on them.
+
+         Drawn in the page's own ink, thinned — never in the accent. The green
+         has four jobs, and staying rare is what makes it read as tended rather
+         than branded.
+         --------------------------------------------------------------------- */
+      .flora {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        contain: layout paint style;
+      }
+
+      .flora-defs { position: absolute; width: 0; height: 0; }
+
+      /* Two mask layers, intersected. The first is the growth reveal, sweeping
+         from the ground up; the second is the narrow-screen fringe, a no-op at
+         full width. Keeping both in one property means one compositing pass and
+         one place to reason about what is hiding what. */
+      .flora-plant {
+        position: absolute;
+        bottom: 0;
+        width: auto;
+        aspect-ratio: 2 / 5;
+        color: var(--flora-ink);
+        opacity: var(--flora-opacity);
+        --fringe: linear-gradient(#000, #000);
+        /* The 100% fallback matters on browsers without @property support: there
+           --grow has no declared value, and without it the whole mask-image
+           would be invalid — taking the narrow-screen fringe down with it and
+           putting full-strength stems back behind the body copy. */
+        mask-image:
+          linear-gradient(to top, #000 0 var(--grow, 100%), transparent calc(var(--grow, 100%) + 14%)),
+          var(--fringe);
+        mask-composite: intersect;
+        animation: flora-grow var(--dur-grow) var(--ease-grow) backwards;
+      }
+
+      /* Stroke width in user units rather than vector-effect:non-scaling-stroke:
+         0.55 against the ~2.1–2.6x render scale lands at roughly 1.2–1.4px, the
+         page's hairline, without the vector-effect's device-space quirks. */
+      .flora-plant use { stroke-width: 0.55; }
+
+      /* The right-hand specimen trails the left so the two don't grow in
+         lockstep, which would read as one animation on two copies. */
+      .flora-plant--r { animation-delay: 600ms; }
+
+      /* Registered so it interpolates — an unregistered custom property would
+         jump from 0 to 100 with nothing in between. */
+      @property --grow {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+
+      /* The reveal starts fully below the mask's edge, so nothing is on screen
+         until the plant has actually grown into it. 100% is the resting state,
+         which is what a zeroed --dur-grow lands on under reduced motion. */
+      @keyframes flora-grow { from { --grow: -15%; } }
+
+      .flora-plant--l { left: -5rem; }
+      .flora-plant--r { right: -5rem; transform: scaleX(-1); }
+
+      /* Narrow: one specimen, not two, and never centred.
+
+         Two edge fringes gave a phone leaf tips with no visible stem, which
+         reads as texture rather than as a plant. A single specimen with enough
+         of itself showing reads as the thing it is. Centring it was worse than
+         either: the column is the whole screen here, so a centred stem runs
+         straight down through the name, the role line and every link row — a
+         scratch across exactly where the eye reads.
+
+         So it stays at the edge, wide enough to be a plant, and only its outer
+         leaves and a thinned stem reach the text. The QR mat is opaque in every
+         theme, so scanning is untouched, and the stem appears to grow out from
+         behind it.
+
+         Right edge, not left. Every link row is left-aligned — icon, then label
+         — so the left edge is where the eye lands on every line, and a specimen
+         there crossed all six of them. The right edge is ragged line-ends. Same
+         plant, same size: 3 text elements touched instead of 7, and not one
+         link label among them. */
+      @media (max-width: 55.99rem) {
+        .flora-plant--l { display: none; }
+
+        .flora-plant--r {
+          right: -3rem;
+          height: calc(clamp(360px, 88svh, 680px) * var(--flora-scale, 1));
+          opacity: 0.6;
+          --fringe: linear-gradient(to right, #000 0 42%, transparent 88%);
+          /* Nothing to stagger against when it's the only one on screen. */
+          animation-delay: 0ms;
+        }
+      }
+
+      /* Wide: the specimens move out into the real margin and never touch the
+         column. The second term caps height by the gutter itself — the gutter
+         is (50vw - half the column - a gutter of air) wide, and the box is 2:5,
+         so height tops out at 2.5x that. The plant is only ever as tall as the
+         space it has, and thins away to nothing as the margin closes. */
+      @media (min-width: 56rem) {
+        .flora-plant {
+          height: min(
+            calc(clamp(340px, 88svh, 780px) * var(--flora-scale, 1)),
+            calc((50vw - var(--container) / 2 - var(--space-4)) * 2.5)
+          );
+        }
+        .flora-plant--l { left: auto; right: calc(50% + var(--container) / 2 + var(--space-4)); }
+        .flora-plant--r { right: auto; left: calc(50% + var(--container) / 2 + var(--space-4)); }
+      }
     }
         </style>
     </head>
     <body>
+        <!-- Eight herbs, plotted by hand in a 120x300 box the way the divider leaf
+             was: stem first, then one compound path per side. Two get mounted in
+             the margins; the script below picks which. -->
+        <div class="flora" aria-hidden="true">
+            <svg class="flora-defs" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <g id="sp-fern" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M74 300C80 202 40 134 24 16"/>
+                        <path d="M74.5 288.4Q61.2 273.5 47.4 275.5M74.4 268.6Q61.4 255.8 48.8 258.3M73.2 249.5Q60.3 238.2 48.8 241.3M71 230.9Q58.4 220.9 47.8 224.3M67.9 212.5Q55.8 203.7 45.9 207.3M64.2 194.3Q52.5 186.4 43.5 190.1M59.9 176Q48.8 168.9 40.4 172.5M55.2 157.6Q44.8 151.1 37 154.5M50.2 138.7Q40.6 132.7 33.3 136M45.2 119.4Q36.2 113.8 29.5 116.7M40.1 99.3Q32 94 25.8 96.7M35.2 78.4Q27.9 73.4 22.1 75.7M30.7 56.5Q24.1 51.7 18.8 53.7M26.6 33.3Q20.8 28.9 15.9 30.5"/>
+                        <path d="M74.5 288.4Q88.6 274.2 102.2 276.9M74.4 268.6Q86.5 254.9 99.2 256.5M73.2 249.5Q83.7 236.1 95.6 236.9M71 230.9Q80.2 217.8 91.4 218M67.9 212.5Q76.1 199.9 86.5 199.7M64.2 194.3Q71.4 182.2 81.2 181.7M59.9 176Q66.4 164.6 75.5 163.9M55.2 157.6Q61.1 146.8 69.6 146.1M50.2 138.7Q55.7 128.7 63.6 128M45.2 119.4Q50.3 110.1 57.6 109.5M40.1 99.3Q44.9 90.9 51.7 90.4M35.2 78.4Q39.8 70.8 46 70.4M30.7 56.5Q35 49.6 40.7 49.5M26.6 33.3Q30.7 27.3 35.8 27.3"/>
+                    </g>
+                    <g id="sp-rosemary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M58 300C74 210 48 118 46 8"/>
+                        <path d="M59.3 291.9Q54.2 282.6 48.4 277.6M61.1 277.9Q55.7 269 49.8 264.4M62.3 263.9Q56.6 255.4 50.7 251.1M63 249.7Q57.1 241.7 51.2 237.7M63.2 235.6Q57.2 227.9 51.3 224.1M62.9 221.3Q57 213.9 51.1 210.5M62.3 206.9Q56.4 199.9 50.6 196.6M61.4 192.4Q55.5 185.7 49.8 182.6M60.3 177.7Q54.4 171.3 48.8 168.5M58.9 162.9Q53.1 156.8 47.7 154.1M57.4 148Q51.8 142.1 46.5 139.5M55.7 132.9Q50.3 127.2 45.2 124.7M54.1 117.6Q48.8 112.1 43.9 109.7M52.4 102.1Q47.4 96.8 42.7 94.4M50.9 86.4Q46.1 81.2 41.5 78.9M49.4 70.4Q44.9 65.4 40.5 63.2M48.1 54.2Q43.8 49.4 39.7 47.2M47.1 37.8Q43.1 33.1 39.2 30.9M46.4 21.1Q42.6 16.6 38.9 14.4"/>
+                        <path d="M59.3 291.9Q67 284.5 74 281.5M61.1 277.9Q68.3 270.4 75 267M62.3 263.9Q69.1 256.2 75.5 252.7M63 249.7Q69.3 242 75.5 238.4M63.2 235.6Q69.1 227.8 75 224.1M62.9 221.3Q68.5 213.6 74.2 209.8M62.3 206.9Q67.6 199.3 73 195.5M61.4 192.4Q66.4 184.9 71.6 181.1M60.3 177.7Q64.9 170.4 69.9 166.6M58.9 162.9Q63.3 155.8 68.1 152.1M57.4 148Q61.6 141.1 66.2 137.4M55.7 132.9Q59.8 126.2 64.3 122.6M54.1 117.6Q58.1 111.1 62.3 107.7M52.4 102.1Q56.3 95.8 60.4 92.6M50.9 86.4Q54.6 80.4 58.6 77.3M49.4 70.4Q53.1 64.7 57 61.8M48.1 54.2Q51.7 48.8 55.5 46.1M47.1 37.8Q50.6 32.7 54.2 30.1M46.4 21.1Q49.8 16.3 53.3 13.9"/>
+                    </g>
+                    <g id="sp-sage" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M66 300C74 206 32 126 22 18"/>
+                        <path d="M66.8 286Q58.4 271 36.3 266.9Q49.6 285 66.8 286ZM65.7 247.2Q55.7 233.7 33.9 232.5Q48.9 248.3 65.7 247.2ZM60.4 209.1Q50.2 197.6 30.2 198.3Q45.2 211.5 60.4 209.1ZM52.3 171Q43 161.4 25.6 162.9Q39.2 173.8 52.3 171ZM43 132.2Q34.9 124.1 20 125.5Q31.8 134.7 43 132.2ZM33.7 92Q27.5 85.4 15.6 86.1Q24.8 93.7 33.7 92ZM25.9 49.6Q21.6 44.5 12.8 44.5Q19.2 50.5 25.9 49.6Z"/>
+                        <path d="M66.8 286Q84.1 286.2 98.6 269.1Q76.3 271.6 66.8 286ZM65.7 247.2Q82.3 245.3 94.3 227Q73 232.1 65.7 247.2ZM60.4 209.1Q75.4 206 84.8 188.4Q65.9 194.8 60.4 209.1ZM52.3 171Q65.3 167.7 72.8 151.9Q56.5 158.3 52.3 171ZM43 132.2Q54.1 129.3 60.4 115.7Q46.5 121.3 43 132.2ZM33.7 92Q42.6 89.9 47.8 79.3Q36.7 83.4 33.7 92ZM25.9 49.6Q32.5 48.4 36.8 40.9Q28.5 43.4 25.9 49.6Z"/>
+                        <!-- Midribs at a third the weight, the same secondary hand as the divider leaf's vein -->
+                        <path stroke-width="0.33" d="M66.8 286L42.4 270.7M66.8 286L92.3 272.5M65.7 247.2L40.3 235.4M65.7 247.2L88.6 231.1M60.4 209.1L36.3 200.5M60.4 209.1L79.9 192.6M52.3 171L30.9 164.5M52.3 171L68.7 155.7M43 132.2L24.6 126.8M43 132.2L56.9 119M33.7 92L19.2 87.3M33.7 92L45 81.8M25.9 49.6L15.4 45.5M25.9 49.6L34.6 42.6"/>
+                    </g>
+                    <g id="sp-thyme" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M56 300C78 198 34 114 52 12"/>
+                        <path d="M58.3 287.8Q57.4 281.1 49.2 278.6Q51.6 286.8 58.3 287.8ZM60.5 272.4Q59.2 265.9 51.1 263.8Q53.9 271.7 60.5 272.4ZM61.8 257.1Q60.2 250.8 52.1 249.3Q55.3 256.8 61.8 257.1ZM62.3 242.1Q60.4 236 52.5 234.9Q55.9 242.1 62.3 242.1ZM62.2 227.3Q60.1 221.4 52.3 220.6Q56 227.5 62.2 227.3ZM61.5 212.6Q59.3 206.9 51.7 206.3Q55.4 213 61.5 212.6ZM60.3 198Q58 192.5 50.6 192.2Q54.4 198.6 60.3 198ZM58.9 183.5Q56.5 178.2 49.3 178Q53.1 184.1 58.9 183.5ZM57.2 169Q54.8 163.9 47.7 163.8Q51.6 169.8 57.2 169ZM55.3 154.6Q53 149.6 46.1 149.6Q49.9 155.3 55.3 154.6ZM53.5 140.2Q51.2 135.3 44.5 135.3Q48.2 140.9 53.5 140.2ZM51.7 125.7Q49.6 121 43 120.9Q46.5 126.4 51.7 125.7ZM50.1 111.2Q48.1 106.6 41.8 106.3Q45.1 111.8 50.1 111.2ZM48.8 96.6Q47 92.1 40.8 91.7Q43.9 97 48.8 96.6ZM47.9 81.9Q46.3 77.4 40.3 76.8Q43.2 82.1 47.9 81.9ZM47.6 67Q46.1 62.6 40.4 61.8Q43 67.1 47.6 67ZM47.8 51.9Q46.6 47.6 41.1 46.6Q43.3 51.8 47.8 51.9ZM48.8 36.6Q47.8 32.4 42.5 31.2Q44.5 36.3 48.8 36.6ZM50.5 21.1Q49.9 17 44.8 15.6Q46.4 20.6 50.5 21.1Z"/>
+                        <path d="M58.3 287.8Q65 289 70 282.1Q61.4 281.8 58.3 287.8ZM60.5 272.4Q67.1 273.2 71.5 266.1Q63.2 266.3 60.5 272.4ZM61.8 257.1Q68.3 257.6 72.2 250.4Q64.1 251.1 61.8 257.1ZM62.3 242.1Q68.6 242.2 72.2 235.1Q64.3 236.1 62.3 242.1ZM62.2 227.3Q68.4 227.1 71.6 220Q63.9 221.3 62.2 227.3ZM61.5 212.6Q67.5 212.2 70.4 205.2Q62.9 206.7 61.5 212.6ZM60.3 198Q66.2 197.5 68.9 190.5Q61.6 192.2 60.3 198ZM58.9 183.5Q64.6 182.9 67 176Q60 177.8 58.9 183.5ZM57.2 169Q62.7 168.4 65 161.7Q58.2 163.5 57.2 169ZM55.3 154.6Q60.8 153.9 63 147.4Q56.3 149.2 55.3 154.6ZM53.5 140.2Q58.8 139.6 60.9 133.2Q54.4 134.9 53.5 140.2ZM51.7 125.7Q56.9 125.2 59 119Q52.7 120.6 51.7 125.7ZM50.1 111.2Q55.1 110.7 57.3 104.8Q51.1 106.3 50.1 111.2ZM48.8 96.6Q53.7 96.3 56 90.5Q50 91.8 48.8 96.6ZM47.9 81.9Q52.7 81.7 55.1 76.2Q49.2 77.3 47.9 81.9ZM47.6 67Q52.2 67 54.7 61.8Q48.9 62.6 47.6 67ZM47.8 51.9Q52.3 52.1 54.9 47.2Q49.3 47.7 47.8 51.9ZM48.8 36.6Q53.1 37.1 55.9 32.4Q50.4 32.7 48.8 36.6ZM50.5 21.1Q54.7 21.8 57.6 17.4Q52.4 17.4 50.5 21.1Z"/>
+                    </g>
+                    <!-- Bud spike up top, bare stem below — the only specimen whose mass is all at one end -->
+                    <g id="sp-lavender" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M62 300C72 212 48 132 44 18"/>
+                        <path d="M63.8 279Q59.2 271.5 48.7 265.8Q55.7 275.4 63.8 279ZM64.4 255.6Q60.2 249.5 51 245.1Q57.4 253 64.4 255.6ZM63.9 232.2Q60.1 227.4 52.4 224.1Q58 230.3 63.9 232.2ZM54.3 135.5Q54.4 130.4 48.4 128.7Q49.1 135 54.3 135.5ZM53.2 127Q53.4 122 47.5 120.4Q48.3 126.5 53.2 127ZM52.2 118.4Q52.4 113.6 46.7 112Q47.4 117.8 52.2 118.4ZM51.2 109.6Q51.4 105 45.9 103.4Q46.6 109.1 51.2 109.6ZM50.2 100.8Q50.4 96.3 45.2 94.8Q45.8 100.2 50.2 100.8ZM49.3 91.8Q49.5 87.5 44.4 86Q45 91.2 49.3 91.8ZM48.4 82.7Q48.6 78.5 43.8 77.1Q44.2 82.1 48.4 82.7ZM47.5 73.4Q47.8 69.4 43.1 68Q43.6 72.8 47.5 73.4ZM46.7 64Q47 60.2 42.5 58.8Q42.9 63.4 46.7 64ZM46 54.4Q46.3 50.8 42 49.4Q42.4 53.9 46 54.4ZM45.3 44.7Q45.6 41.3 41.6 39.9Q41.9 44.2 45.3 44.7ZM44.7 34.9Q45.1 31.5 41.3 30.2Q41.5 34.3 44.7 34.9ZM44.3 24.8Q44.6 21.7 41 20.4Q41.2 24.2 44.3 24.8Z"/>
+                        <path d="M63.8 279Q72.2 276.4 80.2 267.6Q69.2 272.1 63.8 279ZM64.4 255.6Q71.4 253 77.8 245.1Q68.7 249.5 64.4 255.6ZM63.9 232.2Q69.5 229.8 74.5 223.1Q67.1 227 63.9 232.2ZM54.3 135.5Q59.1 133.8 58.4 127.5Q52.9 130.6 54.3 135.5ZM53.2 127Q57.9 125.3 57.2 119.3Q51.9 122.2 53.2 127ZM52.2 118.4Q56.8 116.7 56.1 110.9Q50.9 113.7 52.2 118.4ZM51.2 109.6Q55.6 108.1 55 102.4Q50 105.1 51.2 109.6ZM50.2 100.8Q54.5 99.3 53.9 93.8Q49.1 96.4 50.2 100.8ZM49.3 91.8Q53.4 90.4 52.8 85.1Q48.2 87.6 49.3 91.8ZM48.4 82.7Q52.3 81.3 51.8 76.3Q47.3 78.6 48.4 82.7ZM47.5 73.4Q51.3 72.2 50.9 67.3Q46.5 69.5 47.5 73.4ZM46.7 64Q50.3 62.8 50 58.2Q45.8 60.3 46.7 64ZM46 54.4Q49.5 53.4 49.1 48.9Q45.2 50.9 46 54.4ZM45.3 44.7Q48.7 43.7 48.4 39.5Q44.6 41.3 45.3 44.7ZM44.7 34.9Q47.9 33.9 47.7 29.9Q44.1 31.6 44.7 34.9ZM44.3 24.8Q47.3 24 47.1 20.1Q43.6 21.7 44.3 24.8Z"/>
+                    </g>
+                    <!-- A single umbel: seven rays off one point, each ending in a three-prong fan -->
+                    <g id="sp-dill" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M58 300C66 218 50 158 50 104"/>
+                        <path d="M50 104Q30 94.1 11.5 93M50 104Q33.8 84 15.1 74M50 104Q43.1 76.9 29.1 58.6M50 104Q55.2 75.4 50 52M50 104Q66 81.1 70.9 58.6M50 104Q72.2 91 84.9 74M50 104Q72.3 101.8 88.5 93"/>
+                        <path d="M60.2 257.8Q50.6 245.9 40.9 247.3M59.4 223.4Q50.5 213.7 42.2 215.4M57 191.5Q49.2 183.6 42.2 185.3M60.2 257.8Q70 246.1 79.7 247.6M59.4 223.4Q67.2 212.8 75.7 213.6M57 191.5Q63.2 182.3 70.4 182.7"/>
+                        <path stroke-width="0.33" d="M11.5 93L2.7 94.5M11.5 93L2.9 90.5M11.5 93L4.9 87M15.1 74L6.4 71.7M15.1 74L8.3 68.2M15.1 74L11.5 65.8M29.1 58.6L22.2 52.9M29.1 58.6L25.4 50.4M29.1 58.6L29.3 49.6M50 52L46.1 43.9M50 52L50 43M50 52L53.9 43.9M70.9 58.6L70.7 49.6M70.9 58.6L74.6 50.4M70.9 58.6L77.8 52.9M84.9 74L88.5 65.8M84.9 74L91.7 68.2M84.9 74L93.6 71.7M88.5 93L95.1 87M88.5 93L97.1 90.5M88.5 93L97.3 94.5"/>
+                    </g>
+                    <!-- No central stem at all — a clump of blades, one carrying a closed bud -->
+                    <g id="sp-chives" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M52 300C48 200 38 122 28 66M57 300C59 196 55 104 49 38M62 300C70 204 78 132 86 78"/>
+                        <path d="M54 300C52 212 44 150 32 112M60 300C66 196 74 110 74 48M65 300C75 220 89 168 100 130"/>
+                        <path d="M49 38Q41 26 49 14Q57 26 49 38Z"/>
+                    </g>
+                    <!-- Leaves alternate sides instead of pairing, so the stem reads as a zigzag -->
+                    <g id="sp-bay" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M58 300C70 206 42 122 38 12"/>
+                        <path d="M61 250.7Q73.7 246.2 84 231.3Q67.5 238.9 61 250.7ZM57.5 191.8Q68.2 186.7 75.9 172.8Q62.2 180.9 57.5 191.8ZM49.9 131.7Q59 127.1 65.1 114.9Q53.6 122.2 49.9 131.7ZM42 68.3Q49.7 64.7 55.2 54.8Q45.4 60.5 42 68.3Z"/>
+                        <path d="M60 280.4Q53.9 267.4 37 258.1Q46.7 274.7 60 280.4ZM60 221.2Q53.1 210.5 37.3 204.4Q47.8 217.8 60 221.2ZM54 162Q47.5 153.1 33.4 148.8Q43.2 159.7 54 162ZM45.8 100.5Q40.3 93 28.3 89.3Q36.7 98.6 45.8 100.5ZM39.2 34.7Q35 28.3 25.5 24.7Q31.8 32.7 39.2 34.7Z"/>
+                        <path stroke-width="0.33" d="M60 280.4L41.6 262.6M61 250.7L79.4 235.2M60 221.2L41.8 207.8M57.5 191.8L72.2 176.6M54 162L37.5 151.4M49.9 131.7L62.1 118.3M45.8 100.5L31.8 91.6M42 68.3L52.6 57.5M39.2 34.7L28.2 26.7"/>
+                    </g>
+                </defs>
+            </svg>
+            <svg class="flora-plant flora-plant--l" aria-hidden="true" focusable="false" viewBox="0 0 120 300" xmlns="http://www.w3.org/2000/svg"><use href="#sp-fern"/></svg>
+            <svg class="flora-plant flora-plant--r" aria-hidden="true" focusable="false" viewBox="0 0 120 300" xmlns="http://www.w3.org/2000/svg"><use href="#sp-sage"/></svg>
+        </div>
+        <!-- Deals the two margin specimens fresh on every visit. The page ships a
+             valid pair in the markup above, so with JS off nothing is missing —
+             it just stops being a different sheet each time. -->
+        <script>
+        (() => {
+          const herbs = ["fern", "rosemary", "sage", "thyme",
+                         "lavender", "dill", "chives", "bay"];
+          const slots = document.querySelectorAll(".flora-plant");
+          const n = herbs.length;
+          const a = (Math.random() * n) | 0;
+          // Offset by 1..n-1 rather than redrawing, so the margins never pair a
+          // herb with itself and the two sides always read as two specimens.
+          const b = (a + 1 + ((Math.random() * (n - 1)) | 0)) % n;
+          [a, b].forEach((pick, i) => {
+            slots[i].firstElementChild.setAttribute("href", `#sp-${herbs[pick]}`);
+            slots[i].style.setProperty("--flora-scale", (0.86 + Math.random() * 0.3).toFixed(2));
+          });
+        })();
+        </script>
         <div class="container">
             <main class="profile">
                 <div class="avatar">

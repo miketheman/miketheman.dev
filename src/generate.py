@@ -2,6 +2,7 @@
 import datetime
 import json
 import os
+import pathlib
 import shutil
 import tomllib
 
@@ -11,7 +12,10 @@ from minijinja import Environment, load_from_path
 
 from icons import ICON_CACHE, parse_icon
 
-EXTRAS_VISIBLE_COUNT = 5  # remaining extras hide behind "Show more" in the template
+# Remaining extras hide behind "Show more" in the template. Overridable so
+# `just snapshot` can build a fixture that actually renders the expander —
+# with only a couple of extras it never appears on the real page.
+EXTRAS_VISIBLE_COUNT = int(os.environ.get("EXTRAS_VISIBLE_COUNT", "5"))
 
 
 def icon_svg(icon_class):
@@ -45,6 +49,41 @@ def read_fonts_css():
         return f.read()
 
 
+def file_meta(url):
+    """Type and size for an extra served out of assets/files/.
+
+    A 6 MB deck opened on venue wifi should say so before it's tapped.
+    """
+    if not url.startswith("files/"):
+        return None
+    path = pathlib.Path("assets") / url
+    if not path.exists():
+        return None
+    size_mb = path.stat().st_size / 1_000_000
+    return f"{path.suffix.lstrip('.').upper()}, {size_mb:.1f} MB"
+
+
+def build_verification(metadata):
+    """The identity proofs, gathered for display.
+
+    These already exist as <head> metadata and a human.json file; this makes
+    the same claims legible to a person, which is the whole point of them.
+
+    human.json vouches are deliberately not surfaced here — that part of the
+    spec is still moving. They keep shipping in dist/human.json regardless.
+    """
+    profile_url = next(
+        (link["url"] for link in metadata.get("links", []) if link.get("rel") == "me"),
+        None,
+    )
+    if profile_url is None:
+        raise ValueError(
+            'No link in metadata.toml carries rel = "me". The provenance line '
+            "needs one to point at, and Mastodon needs it to verify the domain."
+        )
+    return {"profile_url": profile_url}
+
+
 def generate_html(metadata):
     env = Environment(loader=load_from_path("templates"))
     env.add_function("icon_svg", icon_svg)
@@ -71,6 +110,11 @@ def generate_html(metadata):
         parsed_extras.sort(key=lambda x: x[0], reverse=True)
         metadata["extras"] = [extra for _, extra in parsed_extras]
 
+        for extra in metadata["extras"]:
+            meta = file_meta(extra["url"])
+            if meta:
+                extra["filemeta"] = meta
+
         visible_extras = metadata["extras"][:EXTRAS_VISIBLE_COUNT]
         expandable_extras = metadata["extras"][EXTRAS_VISIBLE_COUNT:]
 
@@ -79,8 +123,10 @@ def generate_html(metadata):
 
     context = {
         **metadata,
-        # %d zero-pads ("August 02"); build the day without it.
-        "updated_date": "{0:%B} {0.day}, {0:%Y}".format(datetime.datetime.now()),
+        # ISO, like every other date on the page — the extras dates and the
+        # vouch stamp. One date language per sheet.
+        "updated_date": datetime.date.today().isoformat(),
+        "verification": build_verification(metadata),
         "fonts_css": read_fonts_css(),
     }
 
@@ -105,7 +151,14 @@ def main():
         generate_human_json(metadata)
 
         missing = []
-        for name in ("avatar.png", "avatar-plain.png", "favicon.png", "og.png"):
+        for name in (
+            "avatar.png",
+            "avatar.webp",
+            "avatar-plain.png",
+            "avatar-plain.webp",
+            "favicon.png",
+            "og.png",
+        ):
             try:
                 shutil.copy(f"assets/{name}", f"dist/{name}")
             except FileNotFoundError:

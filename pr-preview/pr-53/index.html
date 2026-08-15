@@ -625,15 +625,23 @@
          So it stays at the edge, wide enough to be a plant, and only its outer
          leaves and a thinned stem reach the text. The QR mat is opaque in every
          theme, so scanning is untouched, and the stem appears to grow out from
-         behind it. */
-      @media (max-width: 55.99rem) {
-        .flora-plant--r { display: none; }
+         behind it.
 
-        .flora-plant--l {
-          left: -3rem;
+         Right edge, not left. Every link row is left-aligned — icon, then label
+         — so the left edge is where the eye lands on every line, and a specimen
+         there crossed all six of them. The right edge is ragged line-ends. Same
+         plant, same size: 3 text elements touched instead of 7, and not one
+         link label among them. */
+      @media (max-width: 55.99rem) {
+        .flora-plant--l { display: none; }
+
+        .flora-plant--r {
+          right: -3rem;
           height: calc(clamp(360px, 88svh, 680px) * var(--flora-scale, 1));
           opacity: 0.6;
           --fringe: linear-gradient(to right, #000 0 42%, transparent 88%);
+          /* Nothing to stagger against when it's the only one on screen. */
+          animation-delay: 0ms;
         }
       }
 

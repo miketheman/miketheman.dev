@@ -554,9 +554,21 @@
          has four jobs, and staying rare is what makes it read as tended rather
          than branded.
          --------------------------------------------------------------------- */
+      /* Height is pinned to the LARGE viewport, not to `inset: 0`.
+         `bottom` on a fixed element resolves against the *dynamic* viewport, so
+         on a phone the specimens were anchored to a line that moves: scrolling
+         down retracts the URL bar, the viewport grows, and every plant slid
+         down with it, then back up on the way return. Pinning to 100lvh gives
+         them a baseline that never moves — when the toolbar is showing it sits
+         just behind it, and retracting the bar reveals more of the stem instead
+         of dragging the whole plant. It goes unguarded for the same reason the
+         body's 100svh does: this page already requires the viewport units. */
       .flora {
         position: fixed;
-        inset: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100lvh;
         z-index: 0;
         overflow: hidden;
         pointer-events: none;
@@ -586,6 +598,12 @@
           var(--fringe);
         mask-composite: intersect;
         animation: flora-grow var(--dur-grow) var(--ease-grow) backwards;
+        /* A masked SVG inside a fixed layer is the combination mobile browsers
+           re-rasterize on every scroll frame. Promoting the plants — the
+           absolutely-positioned children, never the fixed parent, which has a
+           long history of WebKit quirks when it carries a transform itself —
+           hands them to the compositor once and takes them off that path. */
+        transform: translateZ(0);
       }
 
       /* Stroke width in user units rather than vector-effect:non-scaling-stroke:
@@ -611,7 +629,7 @@
       @keyframes flora-grow { from { --grow: -15%; } }
 
       .flora-plant--l { left: -5rem; }
-      .flora-plant--r { right: -5rem; transform: scaleX(-1); }
+      .flora-plant--r { right: -5rem; transform: scaleX(-1) translateZ(0); }
 
       /* Narrow: one specimen, not two, and never centred.
 
@@ -638,8 +656,16 @@
         .flora-plant--r {
           right: -3rem;
           height: calc(clamp(360px, 88svh, 680px) * var(--flora-scale, 1));
-          opacity: 0.6;
-          --fringe: linear-gradient(to right, #000 0 42%, transparent 88%);
+          /* Tuned down once it was live on a phone: at 0.6 with the fringe
+             reaching 88% it read as competing with the text rather than sitting
+             behind it. Pulling the fade in to 56% keeps the plant whole and
+             legible in the open space beside the mat and the name, and lets it
+             recede where the rows are. Knocking back the rows instead — filling
+             them with paper so the plant passes behind — was the other way to
+             do it, but that slices the stem at every row border and changes a
+             component the system documents as transparent. */
+          opacity: 0.5;
+          --fringe: linear-gradient(to right, #000 0 22%, transparent 56%);
           /* Nothing to stagger against when it's the only one on screen. */
           animation-delay: 0ms;
         }

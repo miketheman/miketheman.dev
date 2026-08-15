@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Themes the browser's own surfaces (scrollbars, form UI) alongside ours -->
+        <meta name="color-scheme" content="light dark">
         <!-- Primary Meta Tags -->
         <title>{{ name }} - {{ seo_title }}</title>
         <meta name="title" content="{{ name }} - {{ seo_title }}">
@@ -23,9 +25,11 @@
         <meta property="twitter:creator" content="{{ twitter_handle }}">
         <!-- Favicon -->
         <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-        <!-- Preload the LCP avatar — picture source's media query decides which to fetch -->
-        <link rel="preload" as="image" href="avatar.png" fetchpriority="high" media="not all and (min-width: 640px) and (hover: hover) and (pointer: fine)">
-        <link rel="preload" as="image" href="avatar-plain.png" fetchpriority="high" media="(min-width: 640px) and (hover: hover) and (pointer: fine)">
+        <!-- Preload the LCP avatar — picture source's media query decides which to fetch.
+             type="image/webp" means a browser without webp skips the preload and
+             falls through to the PNG source below, so nothing is fetched twice. -->
+        <link rel="preload" as="image" href="avatar.webp" type="image/webp" fetchpriority="high" media="not all and (min-width: 640px) and (hover: hover) and (pointer: fine)">
+        <link rel="preload" as="image" href="avatar-plain.webp" type="image/webp" fetchpriority="high" media="(min-width: 640px) and (hover: hover) and (pointer: fine)">
         <!-- Fonts: self-hosted (see assets/fonts/ + just fonts); @font-face inlined in <style> below -->
         <!-- Icons are inlined SVG (from Font Awesome Free 7.2.0) — see assets/icons/ and just icons -->
         <!-- Verification -->
@@ -180,9 +184,13 @@
         .avatar { max-width: 320px; }
       }
 
-      /* Desktop: drop the rectangular mat frame; circular border hugs the portrait. */
+      /* Desktop: drop the rectangular mat frame; circular border hugs the portrait.
+         The portrait is identity, not payload — at 512px it pushed every link
+         below the fold on a 1280x800 laptop. The QR needs its size to scan; a
+         face does not. */
       @media (min-width: 640px) and (hover: hover) and (pointer: fine) {
         .avatar {
+          max-width: 220px;
           background: transparent;
           padding: 0;
           border-radius: 50%;
@@ -235,8 +243,6 @@
         gap: var(--space-3);
         width: 100%;
       }
-
-      .links { margin-top: var(--space-4); }
 
       .link-item {
         display: flex;
@@ -317,11 +323,41 @@
         margin-top: calc((1em * var(--leading-body) - 1.4em) / 2);
       }
 
-      .extra-link-date {
+      /* The quiet second line under a row label — a date on extras, a
+         disambiguating note on links. Same size, same tier. */
+      .extra-link-date,
+      .link-note {
         font-size: var(--text-xs);
+        color: var(--c-fg-subtle);
+      }
+
+      /* Wide tracking and tabular figures belong to dates and measurements,
+         where they align a column. Prose set at 0.06em just reads slower. */
+      .extra-link-date {
         font-variant-numeric: tabular-nums;
         letter-spacing: var(--tracking-wide);
-        color: var(--c-fg-subtle);
+      }
+
+      /* The note rides the label's line, flush right, so a row that carries one
+         is the same height as a row that doesn't. A ragged stack of 59px and
+         81px rows reads as a mistake; the column edge is what holds the list
+         together. Below 22rem there is genuinely no room beside the label, so
+         it drops under — keep notes short enough that this stays an edge case. */
+      .link-note {
+        margin-left: auto;
+        padding-left: var(--space-3);
+        text-align: right;
+        text-wrap: balance;
+      }
+
+      @media (max-width: 22rem) {
+        .links .link-item { flex-wrap: wrap; }
+        .link-note {
+          margin-left: calc(1.4em + var(--space-4));
+          padding-left: 0;
+          width: 100%;
+          text-align: left;
+        }
       }
 
       .extras-details { width: 100%; }
@@ -361,24 +397,47 @@
 
       .extras-expandable { margin-top: var(--space-3); }
 
-      .footer {
+      /* Bottom annotation block — the provenance note and the date stamp read as
+         one determination slip at the foot of the sheet, not two stray lines. */
+      .sheet-footer {
         margin-top: var(--space-7);
         text-align: center;
         font-size: var(--text-xs);
+        color: var(--c-fg-subtle);
+      }
+
+      .provenance {
+        margin: 0;
+        line-height: var(--leading-body);
+        text-wrap: balance;
+      }
+
+      .provenance a {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.2em;
+      }
+
+      .footer {
+        margin: var(--space-3) 0 0;
         font-variant-numeric: tabular-nums;
         letter-spacing: var(--tracking-wide);
-        color: var(--c-fg-subtle);
       }
     }
         </style>
     </head>
     <body>
-        <main class="container">
-            <div class="profile">
+        <div class="container">
+            <main class="profile">
                 <div class="avatar">
                     <picture>
+                        <source media="(min-width: 640px) and (hover: hover) and (pointer: fine)" srcset="avatar-plain.webp" type="image/webp">
                         <source media="(min-width: 640px) and (hover: hover) and (pointer: fine)" srcset="avatar-plain.png">
-                        <img src="avatar.png" alt="{{ name }}" width="512" height="512">
+                        <source srcset="avatar.webp" type="image/webp">
+                        <!-- alt="" on purpose: the <h1> below carries the name, and neither
+                             variant adds information it doesn't already state. A described
+                             alt here just makes a screen reader say "Mike Fiedler" twice. -->
+                        <img src="avatar.png" alt="" width="512" height="512">
                     </picture>
                 </div>
                 <h1 class="name">{{ name }}</h1>
@@ -388,10 +447,11 @@
                     {% for link in links %}
                         <a href="{{ link.url | safe }}"
                            class="link-item"
-                           rel="noopener noreferrer"
+                           rel="noopener noreferrer{% if link.rel %} {{ link.rel }}{% endif %}"
                            target="_blank">
                             {{ icon_svg(link.icon) | safe }}
                             <span>{{ link.label }}</span>
+                            {% if link.note %}<span class="link-note">{{ link.note }}</span>{% endif %}
                         </a>
                     {% endfor %}
                 </div>
@@ -417,7 +477,7 @@
                                 {{ icon_svg(extra.icon) | safe }}
                                 <div class="extra-link-content">
                                     <span>{{ extra.label }}</span>
-                                    <span class="extra-link-date">{{ extra.date }}</span>
+                                    <span class="extra-link-date">{{ extra.date }}{% if extra.filemeta %} · {{ extra.filemeta }}{% endif %}</span>
                                 </div>
                             </a>
                         {% endfor %}
@@ -436,7 +496,7 @@
                                         {{ icon_svg(extra.icon) | safe }}
                                         <div class="extra-link-content">
                                             <span>{{ extra.label }}</span>
-                                            <span class="extra-link-date">{{ extra.date }}</span>
+                                            <span class="extra-link-date">{{ extra.date }}{% if extra.filemeta %} · {{ extra.filemeta }}{% endif %}</span>
                                         </div>
                                     </a>
                                 {% endfor %}
@@ -446,8 +506,13 @@
                     </div>
                 </div>
                 {% endif %}
-                <div class="footer">Updated {{ updated_date }}</div>
-            </div>
-        </main>
+            </main>
+            <footer class="sheet-footer">
+                <p class="provenance">
+                    Identity: <a href="{{ verification.profile_url | safe }}" rel="me">verified on Mastodon</a>, published as <a href="human.json">human.json</a>
+                </p>
+                <p class="footer">Updated {{ updated_date }}</p>
+            </footer>
+        </div>
     </body>
 </html>

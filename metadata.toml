@@ -1,7 +1,7 @@
 # Profile Configuration
 name = "Mike Fiedler"
 title = "Code Gardener"
-description = "Building better software, one commit at a time. Open source contributor and Python enthusiast."
+description = "I maintain PyPI and work on Python packaging and developer experience. Building better software, one commit at a time."
 seo_title = "PyPI Maintainer, Pythonista, Fun Uncle & Code Gardener"
 seo_description = "Building better software, one commit at a time. PyPI maintainer and open source contributor focused on Python packaging and developer experience."
 site_url = "https://miketheman.dev"
@@ -22,6 +22,8 @@ icon = "fa-brands fa-bluesky"
 url = "https://hachyderm.io/@miketheman"
 icon = "fa-brands fa-mastodon"
 label = "Mastodon"
+# rel="me" here (not just in <head>) is what proves the account back to Mastodon.
+rel = "me"
 
 [[links]]
 url = "https://www.linkedin.com/in/miketheman/"
@@ -32,11 +34,13 @@ icon = "fa-brands fa-linkedin"
 url = "https://www.miketheman.net/"
 label = "Personal Blog"
 icon = "fa-solid fa-blog"
+note = "miketheman.net"
 
 [[links]]
 url = "https://blog.pypi.org/"
 label = "PyPI Blog"
 icon = "fa-brands fa-python"
+note = "Python Package Index"
 
 [[extras]]
 label = "DevOpsDays Tel Aviv 2025 - Moving Mountains (companion)"

@@ -175,3 +175,5 @@ cython_debug/
 
 # OG card temp render (written + deleted by src/og.py)
 assets/.og.html
+# Local impeccable critique archive
+.impeccable/critique/

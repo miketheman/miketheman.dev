@@ -142,6 +142,37 @@ def generate_human_json(metadata):
         f.write("\n")
 
 
+def generate_llms_txt(metadata):
+    """Write dist/llms.txt per https://llmstxt.org/ from metadata.toml."""
+    site_url = metadata["site_url"].rstrip("/")
+
+    def absolute(url):
+        return url if "://" in url else f"{site_url}/{url}"
+
+    lines = [
+        f"# {metadata['name']}",
+        "",
+        f"> {metadata['title']}. {metadata['description']}",
+        "",
+        "A single-page personal site linking to my profiles, writing, and talks.",
+        "",
+        "## Profiles",
+        "",
+    ]
+    for link in metadata["links"]:
+        note = f": {link['note']}" if link.get("note") else ""
+        lines.append(f"- [{link['label']}]({link['url']}){note}")
+
+    extras = sorted(metadata.get("extras", []), key=lambda e: e["date"], reverse=True)
+    if extras:
+        lines += ["", "## Talks and Resources", ""]
+        for extra in extras:
+            lines.append(f"- [{extra['label']}]({absolute(extra['url'])}): {extra['date']}")
+
+    with open("dist/llms.txt", "w") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 def main():
     try:
         os.makedirs("dist", exist_ok=True)
@@ -149,6 +180,7 @@ def main():
         metadata = read_metadata()
         generate_html(metadata)
         generate_human_json(metadata)
+        generate_llms_txt(metadata)
 
         missing = []
         for name in (

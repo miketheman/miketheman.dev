@@ -1,0 +1,19 @@
+# Mike Fiedler
+
+> Code Gardener. I maintain PyPI and work on Python packaging and developer experience. Building better software, one commit at a time.
+
+A single-page personal site linking to my profiles, writing, and talks.
+
+## Profiles
+
+- [GitHub](https://github.com/miketheman)
+- [Bluesky](https://bsky.app/profile/miketheman.com)
+- [Mastodon](https://hachyderm.io/@miketheman)
+- [LinkedIn](https://www.linkedin.com/in/miketheman/)
+- [Personal Blog](https://www.miketheman.net/): miketheman.net
+- [PyPI Blog](https://blog.pypi.org/): Python Package Index
+
+## Talks and Resources
+
+- [Trusted Publishing - Eliminating credentials from your release workflow](https://miketheman.dev/files/Trusted-Publishing.pdf): 2026-05-27
+- [DevOpsDays Tel Aviv 2025 - Moving Mountains (companion)](https://gist.github.com/miketheman/eb4e7214afd7372d5080d557f70a81bd): 2025-12-11
